@@ -7,6 +7,7 @@ import { encodeAddress } from '@polkadot/keyring';
 import { hexToU8a } from '@polkadot/util';
 
 export const Transaction: FC = () => {
+
   const config: TableConfig[] = [
     {
       align: 'left',
@@ -14,20 +15,6 @@ export const Transaction: FC = () => {
       /* eslint-disable-next-line react/display-name */
       render: (value): ReactNode => <FormatHash hash={value} />,
       title: 'Hash'
-    },
-    {
-      align: 'left',
-      dataIndex: 'signer',
-      /* eslint-disable-next-line react/display-name */
-      render: (value): ReactNode => (
-        <FormatAddress
-          address={value}
-          iconWidth={16}
-          withCopy
-          withIcon
-        />
-      ),
-      title: 'From'
     },
     {
       align: 'left',
