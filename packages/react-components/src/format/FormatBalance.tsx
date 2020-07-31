@@ -32,9 +32,9 @@ export const FormatBalance: FC<FormatBalanceProps> = ({
   balance,
   className,
   currency,
+  decimalLength = 6,
   pair,
-  pairSymbol,
-  decimalLength = 6
+  pairSymbol
 }) => {
   const pairLength = pair ? pair.length : 0;
 
