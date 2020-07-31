@@ -1,9 +1,8 @@
 import React, { FC, useContext } from 'react';
 
 import { Card, List } from '@acala-dapp/ui-components';
-import { getTokenName } from '@acala-dapp/react-components';
+import { getTokenName, FormatRatio } from '@acala-dapp/react-components';
 import { convertToFixed18 } from '@acala-network/app-util';
-import { FormatFixed18 } from '@acala-dapp/react-components/format/FormatFixed18';
 
 import { StakingPoolContext } from './StakingPoolProvider';
 
@@ -20,24 +19,18 @@ export const SystemInfo: FC = () => {
       <List style='list'>
         <List.Item
           label={`Exchange Rate (${getTokenName(stakingPool.stakingCurrency)} / ${getTokenName(stakingPool.liquidCurrency)})`}
-          value={<FormatFixed18 data={stakingPoolHelper.liquidExchangeRate} />}
+          value={<FormatRatio data={stakingPoolHelper.liquidExchangeRate} />}
         />
         <List.Item
           label='Max Bonding Ratio'
           value={
-            <FormatFixed18
-              data={convertToFixed18(stakingPool.maxBondRatio)}
-              format='percentage'
-            />
+            <FormatRatio data={convertToFixed18(stakingPool.maxBondRatio)} />
           }
         />
         <List.Item
           label='Min Bonding Ratio'
           value={
-            <FormatFixed18
-              data={convertToFixed18(stakingPool.minBondRatio)}
-              format='percentage'
-            />
+            <FormatRatio data={convertToFixed18(stakingPool.minBondRatio)} />
           }
         />
       </List>

@@ -1,6 +1,6 @@
 import React, { FC, useContext, useMemo, useCallback } from 'react';
 
-import { FormatBalance, FormatFixed18, TxButton, numToFixed18Inner } from '@acala-dapp/react-components';
+import { FormatBalance, TxButton, numToFixed18Inner, FormatRatio } from '@acala-dapp/react-components';
 import { createProviderContext } from './CreateProvider';
 import { useConstants, useLoanHelper } from '@acala-dapp/react-hooks';
 import { Fixed18, stableCoinToDebit, calcCollateralRatio } from '@acala-network/app-util';
@@ -83,19 +83,13 @@ export const Confirm: FC = () => {
         <List.Item
           label='Collateralization Ratio'
           value={
-            <FormatFixed18
-              data={collateralRatio}
-              format='percentage'
-            />
+            <FormatRatio data={collateralRatio} />
           }
         />
         <List.Item
           label='Interest Rate'
           value={
-            <FormatFixed18
-              data={helper.stableFeeAPR}
-              format='percentage'
-            />
+            <FormatRatio data={helper.stableFeeAPR} />
           }
         />
       </List>

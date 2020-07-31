@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { useConstants, useCall } from '@acala-dapp/react-hooks';
 import { TableConfig, Table } from '@acala-dapp/ui-components';
-import { Token, WatchStorage, FormatFixed18 } from '@acala-dapp/react-components';
+import { Token, WatchStorage, FormatFixed18, FormatBalance } from '@acala-dapp/react-components';
 import { Fixed18, convertToFixed18 } from '@acala-network/app-util';
 import { Balance } from '@acala-network/types/interfaces/runtime';
 import { ExchangeRate } from '@acala-network/types/interfaces';
@@ -11,6 +11,7 @@ import { Codec } from '@polkadot/types/types';
 const TotalDebit: FC<{ token: string}> = ({ token }) => {
   const exchangeRate = useCall<Option<ExchangeRate>>('query.cdpEngine.debitExchangeRate', [token]);
   const totalDebit = useCall<Balance>('query.loans.totalDebits', [token]);
+  const { stableCurrency } = useConstants();
 
   const _debit = useMemo(() => {
     if (!exchangeRate || !totalDebit) {
@@ -20,7 +21,12 @@ const TotalDebit: FC<{ token: string}> = ({ token }) => {
     return convertToFixed18(exchangeRate).mul(convertToFixed18(totalDebit));
   }, [exchangeRate, totalDebit]);
 
-  return <FormatFixed18 data={_debit} />;
+  return (
+    <FormatBalance
+      balance={_debit}
+      currency={stableCurrency}
+    />
+  );
 };
 
 export const EmergencyPrepeper: FC = () => {

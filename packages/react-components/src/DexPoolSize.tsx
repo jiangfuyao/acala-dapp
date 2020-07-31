@@ -19,7 +19,7 @@ export const DexPoolSize: FC<Props> = ({ token }) => {
 
   return (
     <FormatBalance
-      maxDecimalLength={2}
+      decimalLength={2}
       pair={[
         {
           balance: pool.other,

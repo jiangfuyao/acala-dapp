@@ -3,7 +3,7 @@ import React, { FC, useMemo } from 'react';
 import { Chart, Interval, Tooltip, Coordinate, Axis, Interaction } from 'bizcharts';
 import { Card } from '@acala-dapp/ui-components';
 import { useSwapOverview } from '@acala-dapp/react-hooks';
-import { getTokenName, getTokenColor, FormatFixed18 } from '@acala-dapp/react-components';
+import { getTokenName, getTokenColor, FormatValue } from '@acala-dapp/react-components';
 
 interface ChartData {
   currency: string;
@@ -39,10 +39,7 @@ export const SwapPool: FC = () => {
   return (
     <Card
       extra={(
-        <FormatFixed18
-          data={overview.total}
-          prefix='≈ $ '
-        />
+        <FormatValue data={overview.total} />
       )}
       header='Swap Pool Overview'
     >

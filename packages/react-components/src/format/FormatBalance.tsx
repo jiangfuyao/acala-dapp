@@ -1,16 +1,13 @@
-import React, { FC, useRef, ReactElement } from 'react';
-import { compose, curry, placeholder } from 'lodash/fp';
-import clsx from 'clsx';
+import React, { FC, ReactElement } from 'react';
 
 import { Balance as BalanceType } from '@polkadot/types/interfaces';
 import { Fixed18 } from '@acala-network/app-util';
 
 import { CurrencyId } from '@acala-network/types/interfaces';
 import { BareProps } from '@acala-dapp/ui-components/types';
-import { randomID, Tooltip } from '@acala-dapp/ui-components';
 
-import { formatBalance, getTokenName, thousand, effectiveDecimal } from '../utils';
-import classes from './format.module.scss';
+import { formatBalance, getTokenName } from '../utils';
+import { FormatNumber, FormatNumberProps } from './FormatNumber';
 
 export interface BalancePair {
   balance?: BalanceType | Fixed18 | number;
@@ -22,64 +19,43 @@ export interface FormatBalanceProps extends BareProps {
   currency?: CurrencyId | string;
   pair?: BalancePair[];
   pairSymbol?: string;
-  primary?: boolean;
-  withTooltip?: boolean;
-  effectiveDecimalLength?: number;
-  maxDecimalLength?: number;
+  decimalLength?: number;
 }
+
+const formatBalanceConfig: FormatNumberProps['formatNumberConfig'] = {
+  decimalLength: 6,
+  removeEmptyDecimalParts: true,
+  removeTailZero: true
+};
 
 export const FormatBalance: FC<FormatBalanceProps> = ({
   balance,
   className,
   currency,
-  effectiveDecimalLength = 2,
-  maxDecimalLength = 6,
   pair,
   pairSymbol,
-  primary = false,
-  withTooltip = false
+  decimalLength = 6
 }) => {
   const pairLength = pair ? pair.length : 0;
-  const _id = useRef(randomID());
 
-  const renderBalance = (data: BalancePair, index: number, usethousand: boolean): ReactElement => {
-    const _noop = (i: any): any => i;
-
-    const _transform = compose(
-      curry(effectiveDecimal)(placeholder, effectiveDecimalLength, maxDecimalLength),
-      usethousand ? thousand : _noop
-    );
-
+  const renderBalance = (data: BalancePair, index: number): ReactElement => {
     const _balance = formatBalance(data?.balance);
-    const balance = _balance.isNaN() ? _balance.toString() : _transform(_balance.toNumber(18, 3));
 
     return (
-      <span key={`${_id}-${index}`}>
-        {balance}
+      <>
+        <FormatNumber
+          data={_balance}
+          formatNumberConfig={{ ...formatBalanceConfig, decimalLength }}
+        />
         {data.currency ? <span>{' '}{getTokenName(data.currency)}</span> : null}
         {(pairSymbol && index !== pairLength - 1) ? <span>{' '}{pairSymbol}{' '}</span> : null}
-      </span>
+      </>
     );
   };
 
   return (
-    <Tooltip
-      placement='left'
-      show={withTooltip}
-      title={pair ? pair.map((data, index) => renderBalance(data, index, true)) : renderBalance({ balance, currency }, -1, true)}
-    >
-      <span
-        className={
-          clsx(
-            className,
-            {
-              [classes.primary]: primary
-            }
-          )
-        }
-      >
-        {pair ? pair.map((data, index) => renderBalance(data, index, true)) : renderBalance({ balance, currency }, -1, true)}
-      </span>
-    </Tooltip>
+    <span className={className}>
+      {pair ? pair.map((data, index) => renderBalance(data, index)) : renderBalance({ balance, currency }, -1)}
+    </span>
   );
 };

@@ -5,9 +5,10 @@ import { CurrencyId } from '@acala-network/types/interfaces';
 
 import { useBalance, useValue, useTotalValue, usePrice } from '@acala-dapp/react-hooks';
 
-import { FormatBalance, FormatFixed18, FormatFixed18Props, FormatBalanceProps } from './format';
+import { FormatBalance, FormatFixed18, FormatBalanceProps, FormatValue, FormatNumberProps } from './format';
 import { AccountLike, CurrencyLike } from '@acala-dapp/react-hooks/types';
 import { Fixed18, convertToFixed18 } from '@acala-network/app-util';
+import { BareProps } from '@acala-dapp/ui-components/types';
 
 interface UserAssetBalanceProps extends FormatBalanceProps {
   account?: AccountLike;
@@ -35,9 +36,8 @@ export const UserAssetBalance: FC<UserAssetBalanceProps> = ({ account, currency,
   );
 };
 
-interface UserAssetValueProps extends FormatFixed18Props{
+interface UserAssetValueProps extends BareProps {
   account?: AccountId | string;
-  quantity?: number;
   currency: CurrencyId | string;
 }
 
@@ -45,27 +45,20 @@ interface UserAssetValueProps extends FormatFixed18Props{
  * @name UserAssetValue
  * @description display user asset amount in USD
  */
-export const UserAssetValue: FC<UserAssetValueProps> = ({
-  account,
-  currency,
-  prefix = '≈ US $',
-  ...other
-}) => {
+export const UserAssetValue: FC<UserAssetValueProps> = ({ account, className, currency }) => {
   const amount = useValue(currency, account);
 
   if (!amount) return null;
 
   return (
-    <FormatFixed18
+    <FormatValue
+      className={className}
       data={amount}
-      maxDecimalLength={2}
-      prefix={prefix}
-      {...other}
     />
   );
 };
 
-export interface TotalUserAssetValueProps extends FormatFixed18Props {
+export interface TotalUserAssetValueProps extends BareProps {
   account?: AccountId | string;
 }
 
@@ -75,20 +68,19 @@ export interface TotalUserAssetValueProps extends FormatFixed18Props {
  */
 export const TotalUserAssetValue: FC<TotalUserAssetValueProps> = ({
   account,
-  ...other
+  className
 }) => {
   const amount = useTotalValue(account);
 
   return (
-    <FormatFixed18
+    <FormatValue
+      className={className}
       data={amount}
-      prefix='$'
-      {...other}
     />
   );
 };
 
-export interface AssetValueProps extends FormatFixed18Props {
+export interface AssetValueProps extends FormatNumberProps {
   quantity: number | Fixed18;
   currency: CurrencyLike;
 }

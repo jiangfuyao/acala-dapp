@@ -7,7 +7,7 @@ import { Table, TableConfig, Card } from '@acala-dapp/ui-components';
 import { useAllPrices } from '@acala-dapp/react-hooks';
 
 import { getTokenName } from '../utils';
-import { FormatFixed18 } from '../format';
+import { FormatPrice } from '../format';
 
 export const PricesFeedCard: FC = memo(() => {
   const data = useAllPrices();
@@ -26,10 +26,7 @@ export const PricesFeedCard: FC = memo(() => {
       dataIndex: 'price',
       render (data: Fixed18): ReactNode {
         return (
-          <FormatFixed18
-            data={data}
-            prefix='$'
-          />
+          <FormatPrice data={data} />
         );
       },
       title: 'Price'

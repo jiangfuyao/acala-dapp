@@ -3,7 +3,7 @@ import { CurrencyId } from '@acala-network/types/interfaces';
 import { useDexReward, useApi } from '@acala-dapp/react-hooks';
 import { convertToFixed18, Fixed18 } from '@acala-network/app-util';
 
-import { FormatFixed18 } from './format';
+import { FormatRatio } from './format';
 
 interface Props {
   token: CurrencyId | string;
@@ -19,9 +19,6 @@ export const DexRewardRatio: FC<Props> = ({ token }) => {
   const rewardRatioYEAR = _rewardRatio.mul(Fixed18.fromNatural((YEAR / expectedBlockTime)));
 
   return (
-    <FormatFixed18
-      data={rewardRatioYEAR}
-      format='percentage'
-    />
+    <FormatRatio data={rewardRatioYEAR} />
   );
 };

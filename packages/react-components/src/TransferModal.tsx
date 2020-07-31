@@ -44,7 +44,6 @@ const AssetBoard: FC<AssetBoardProps> = ({
           <UserAssetValue
             className={classes.amount}
             currency={currency}
-            withTooltip={false}
           />
         </div>
       </div>

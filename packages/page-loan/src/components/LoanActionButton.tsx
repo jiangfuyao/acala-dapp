@@ -7,7 +7,7 @@ import { stableCoinToDebit, Fixed18, convertToFixed18, calcLiquidationPrice, cal
 
 import { Dialog, ButtonProps, Button, List } from '@acala-dapp/ui-components';
 import { useModal, useFormValidator, useConstants, useBalance, useLoanHelper } from '@acala-dapp/react-hooks';
-import { NBalanceInput, TxButton, FormatBalance, FormatFixed18 } from '@acala-dapp/react-components';
+import { NBalanceInput, TxButton, FormatBalance, FormatRatio, FormatPrice } from '@acala-dapp/react-components';
 
 import classes from './LoanActionButton.module.scss';
 
@@ -281,19 +281,13 @@ export const LonaActionButton: FC<Props> = ({
           <List.Item
             label='New Collateral Ratio'
             value={
-              <FormatFixed18
-                data={formatListData(newCollateralRatio)}
-                format='percentage'
-              />
+              <FormatRatio data={formatListData(newCollateralRatio)} />
             }
           />
           <List.Item
             label='New Liquidation Price'
             value={
-              <FormatFixed18
-                data={formatListData(newLiquidationPrice)}
-                prefix='$'
-              />
+              <FormatPrice data={formatListData(newLiquidationPrice)} />
             }
           />
         </List>

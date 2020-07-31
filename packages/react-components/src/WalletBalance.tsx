@@ -32,8 +32,6 @@ export const Balance: FC<BalanceProps> = ({ className, currency }) => {
           <UserAssetBalance
             className={classes.balance}
             currency={currency}
-            maxDecimalLength={2}
-            withTooltip={true}
           />
           <Condition
             condition={tokenEq(currency, liquidCurrency)}
@@ -41,15 +39,11 @@ export const Balance: FC<BalanceProps> = ({ className, currency }) => {
               <UserAssetValue
                 className={classes.amount}
                 currency={currency}
-                maxDecimalLength={2}
-                prefix='≈US $'
-                withTooltip={true}
               />
             }>
             <StakingPoolExchangeRate
               className={classes.amount}
               liquidAmount={liquidBalance}
-              maxDecimalLength={2}
               showLiquidAmount={false}
             />
           </Condition>

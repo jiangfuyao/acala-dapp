@@ -9,125 +9,9 @@ import { TimestampedValue } from '@open-web3/orml-types/interfaces';
 
 export * from './token';
 export * from './account';
+export * from './formatter';
 
 dayjs.extend(duration);
-
-export const LAMINAR_WATCHER_ADDRESS = '5CLaminarAUSDCrossChainTransferxxxxxxxxxxxxxwisu';
-
-export const LAMINAR_SENDER_ADDRESS = '5DiKSJG59azdU8YkmYcPxSg2BNfXgph4dcJVKEn5vibyN6iK';
-
-export const FAUCET_ADDRESS = '5DZbNKzPgAnpb5LYfafPx4P3JMeyn1kxyeSJNuoCKddxEbXc';
-
-// works like toFixed but don't round, doesn't support scientific notation
-export const padDecimalPlaces = (origin: number | string, dp: number): string => {
-  const _origin = origin.toString();
-
-  if (_origin.includes('e')) {
-    return Number(origin).toFixed(dp);
-  }
-
-  let [i, d] = _origin.split('.');
-
-  if (!d) {
-    return i;
-  }
-
-  if (d) {
-    d = d.length > dp ? d.slice(0, dp) : d.padEnd(dp, '0');
-  }
-
-  return [i, d].join('.');
-};
-
-export const effectiveDecimal = (origin: number | string, dp: number, maxDecimalLength: number): string => {
-  let _origin = origin.toString();
-
-  // transfer scientific notation to number
-  if (_origin.includes('e')) {
-    _origin = Number(origin).toFixed(18).toString();
-  }
-
-  let [i, d] = _origin.split('.');
-
-  if (!d) {
-    d = ''.padEnd(dp, '0');
-  } else {
-    let count = dp;
-    let ignoreZero = true;
-
-    d = d.split('').reduce((acc, cur) => {
-      ignoreZero = ignoreZero !== false && cur === '0';
-
-      if (count <= 0) return acc;
-
-      if (ignoreZero) return acc + cur;
-
-      count -= 1;
-
-      return acc + cur;
-    }, '');
-  }
-
-  d = d.slice(0, maxDecimalLength);
-
-  if (d === '0'.repeat(maxDecimalLength)) {
-    d = '00';
-  }
-
-  return [i, d].join('.');
-};
-
-export const thousand = (num: number): string => {
-  const _num = num.toString();
-  const [i, d] = _num.split('.');
-  const reg = /(?!\b)(?=(\d{3})+\b)/g;
-
-  return i.replace(reg, ',') + (d ? '.' + d : '');
-};
-
-export const formatHash = (hash: string, name = true): string => {
-  if (name) {
-    if (hash === LAMINAR_WATCHER_ADDRESS || hash === LAMINAR_SENDER_ADDRESS) {
-      return 'Laminar';
-    }
-
-    if (hash === FAUCET_ADDRESS) {
-      return 'Faucet';
-    }
-  }
-
-  return hash.replace(/(\w{6})\w*?(\w{6}$)/, '$1......$2');
-};
-
-export const formatAddress = (address: string): string => {
-  if (address === LAMINAR_WATCHER_ADDRESS || address === LAMINAR_SENDER_ADDRESS) {
-    return 'Laminar';
-  }
-
-  if (address === FAUCET_ADDRESS) {
-    return 'Faucet';
-  }
-
-  return address.replace(/(\w{6})\w*?(\w{6}$)/, '$1......$2');
-};
-
-export const formatBalance = (balance: Fixed18 | Codec | number | string | undefined): Fixed18 => {
-  let inner = Fixed18.ZERO;
-
-  if (!balance) {
-    return Fixed18.ZERO;
-  }
-
-  if (typeof balance === 'number' || typeof balance === 'string') {
-    inner = Fixed18.fromNatural(balance);
-  } else if (balance instanceof Fixed18) {
-    inner = balance;
-  } else {
-    inner = Fixed18.fromParts(balance.toString());
-  }
-
-  return inner;
-};
 
 export const numToFixed18Inner = (num: number | string): string => {
   return Fixed18.fromNatural(num).innerToString();
@@ -158,12 +42,6 @@ export const getCurrencyIdFromName = (api: ApiRx | ApiPromise, name: string): Cu
   } catch (e) {
     return name;
   }
-};
-
-export const formatDuration = (duration: number): number => {
-  const DAY = 1000 * 60 * 60 * 24;
-
-  return Fixed18.fromRational(duration, DAY).toNumber(6, 2);
 };
 
 export const eliminateGap = (target: Fixed18, max: Fixed18, gap: Fixed18): Fixed18 => {

@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react';
 import { useLockPrices } from '@acala-dapp/react-hooks/useLockPrices';
 import { Table, TableConfig } from '@acala-dapp/ui-components';
-import { Token, FormatFixed18 } from '@acala-dapp/react-components';
+import { Token, FormatPrice } from '@acala-dapp/react-components';
 import { Fixed18 } from '@acala-network/app-util';
 import { BareProps } from '@acala-dapp/ui-components/types';
 
@@ -34,12 +34,7 @@ export const LockPrices: FC<BareProps> = ({ className }) => {
       dataIndex: 'price',
       /* eslint-disable-next-line react/display-name */
       render: (price: Fixed18): JSX.Element => {
-        return (
-          <FormatFixed18
-            data={price}
-            prefix='$'
-          />
-        );
+        return <FormatPrice data={price} />;
       },
       title: 'price'
     }

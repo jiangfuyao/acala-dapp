@@ -6,21 +6,21 @@ import { convertToFixed18 } from '@acala-network/app-util';
 
 import { useCall, useAccounts, usePrice } from '@acala-dapp/react-hooks';
 import { BareProps } from '@acala-dapp/ui-components/types';
-import { FormatFixed18, FormatBalance } from './format';
+import { FormatValue, FormatBalance } from './format';
 
 interface Props extends BareProps {
   account?: AccountId | string;
   token: CurrencyId | string;
-  withPrice?: boolean;
+  showValue?: boolean;
   withIcon?: boolean;
 }
 
 export const UserBalance: FC<Props> = memo(({
   account,
   className,
+  showValue = false,
   token,
-  withIcon = true,
-  withPrice = false
+  withIcon = true
 }) => {
   const { active } = useAccounts();
   const _account = account !== undefined ? account : active ? active.address : '';
@@ -32,15 +32,13 @@ export const UserBalance: FC<Props> = memo(({
     return null;
   }
 
-  if (withPrice) {
-    const _amount = price.mul(convertToFixed18(result));
+  if (showValue) {
+    const _value = price.mul(convertToFixed18(result));
 
     return (
-      <FormatFixed18
+      <FormatValue
         className={className}
-        data={_amount}
-        format='thousand'
-        prefix='$'
+        data={_value}
       />
     );
   }

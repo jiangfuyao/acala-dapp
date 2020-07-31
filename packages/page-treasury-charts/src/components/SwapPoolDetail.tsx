@@ -3,7 +3,7 @@ import React, { FC, useMemo } from 'react';
 import { Table } from 'antd';
 import { Card } from '@acala-dapp/ui-components';
 import { useConstants, useSwapOverview } from '@acala-dapp/react-hooks';
-import { Token, Price, FormatFixed18, FormatBalance } from '@acala-dapp/react-components';
+import { Token, Price, FormatValue, FormatBalance } from '@acala-dapp/react-components';
 
 export const SwapPoolDetail: FC = () => {
   const overview = useSwapOverview();
@@ -47,10 +47,7 @@ export const SwapPoolDetail: FC = () => {
         key: 'value',
         /* eslint-disable-next-line react/display-name */
         render: (item: any): JSX.Element => (
-          <FormatFixed18
-            data={item.value}
-            prefix='≈ $'
-          />
+          <FormatValue data={item.value} />
         ),
         title: 'Value'
       }

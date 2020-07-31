@@ -2,7 +2,7 @@ import React, { FC, memo } from 'react';
 
 import classes from './SwapConsole.module.scss';
 import { Tag } from '@acala-dapp/ui-components';
-import { FormatBalance, FormatFixed18 } from '@acala-dapp/react-components';
+import { FormatBalance, FormatRatio } from '@acala-dapp/react-components';
 import { Fixed18 } from '@acala-network/app-util';
 import { CurrencyId } from '@acala-network/types/interfaces';
 
@@ -38,10 +38,7 @@ export const SwapInfo: FC<Props> = memo(({
       <p>
         Expected price slippage
         <Tag>
-          <FormatFixed18
-            data={Fixed18.fromNatural(slippage)}
-            format='percentage'
-          />
+          <FormatRatio data={Fixed18.fromNatural(slippage)} />
         </Tag>
       </p>
     </div>

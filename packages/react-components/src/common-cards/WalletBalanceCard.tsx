@@ -67,8 +67,8 @@ export const WalletBalanceCard: FC<Props> = memo(({
       /* eslint-disable-next-line react/display-name */
       render: (token: CurrencyId): ReactNode => (
         <UserBalance
+          showValue
           token={token}
-          withPrice
         />
       ),
       title: 'Amount',

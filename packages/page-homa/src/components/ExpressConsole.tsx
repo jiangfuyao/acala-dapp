@@ -117,15 +117,17 @@ const UnstakePanel: FC = () => {
   }, [helper]);
 
   const maxToUnstake = useMemo<Fixed18>((): Fixed18 => {
-    return liquidCurrencyBalance;
-  }, [liquidCurrencyBalance]);
+    if (!helper) return Fixed18.ZERO;
+
+    return helper.communalFree.div(helper.liquidExchangeRate);
+  }, [helper]);
 
   const params = useMemo(() => {
     if (!liquidCurrencyBalance) return [];
 
     const _amount = eliminateGap(Fixed18.fromNatural(amount), convertToFixed18(liquidCurrencyBalance), Fixed18.fromNatural(0.000001));
 
-    return [_amount.innerToString(), 'WaitForUnbonding'];
+    return [_amount.innerToString(), 'Immediately'];
   }, [amount, liquidCurrencyBalance]);
 
   const isDisabled = useMemo<boolean>((): boolean => {
@@ -170,6 +172,15 @@ const UnstakePanel: FC = () => {
           <List.Item
             label='Price'
             value={<Price />}
+          />
+          <List.Item
+            label='Fee'
+            value={
+              <FormatBalance
+                balance={fee}
+                currency={liquidCurrency}
+              />
+            }
           />
         </List>
       </div>

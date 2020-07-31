@@ -62,7 +62,6 @@ export const DexExchangeRate: FC<Props> = memo(({ supply, target }) => {
 
   return (
     <FormatBalance
-      maxDecimalLength={2}
       pair={[
         {
           balance: 1,

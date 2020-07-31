@@ -1,5 +1,4 @@
 import React, { FC, ReactNode } from 'react';
-
 import { BaseTxHistory, FormatBalance, FormatTime, FormatHash, FormatAddress } from '@acala-dapp/react-components';
 import { TableConfig, Status } from '@acala-dapp/ui-components';
 import { Fixed18 } from '@acala-network/app-util';
@@ -7,7 +6,6 @@ import { encodeAddress } from '@polkadot/keyring';
 import { hexToU8a } from '@polkadot/util';
 
 export const Transaction: FC = () => {
-
   const config: TableConfig[] = [
     {
       align: 'left',

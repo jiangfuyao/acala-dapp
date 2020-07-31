@@ -5,7 +5,7 @@ import { Chart, Interval, Tooltip, Axis, Coordinate, Interaction } from 'bizchar
 import { Fixed18 } from '@acala-network/app-util';
 
 import { useTotalDebit, useTotalCollatearl, TotalDebitOrCollateralData } from '@acala-dapp/react-hooks';
-import { FormatFixed18, getTokenColor, getTokenName } from '@acala-dapp/react-components';
+import { getTokenColor, getTokenName, FormatValue } from '@acala-dapp/react-components';
 
 import classes from './TotalDebitAndCollateral.module.scss';
 
@@ -58,12 +58,7 @@ const OverviewDataDisplay: FC<OverviewDataDisplayProps> = ({ data, title }) => {
       span={12}
     >
       <Card
-        extra={
-          <FormatFixed18
-            data={data.amount}
-            prefix='≈ $ '
-          />
-        }
+        extra={<FormatValue data={data.amount} />}
         header={title}
       >
         <div className={classes.chart}>

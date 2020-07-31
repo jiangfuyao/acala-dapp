@@ -56,7 +56,6 @@ const AssetCard: FC<AssetCardProps> = ({ className, currency }) => {
               <UserAssetValue
                 className={classes.amount}
                 currency={currency}
-                prefix='≈US$'
               />
             }>
             <StakingPoolExchangeRate

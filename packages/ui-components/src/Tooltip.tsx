@@ -5,11 +5,11 @@ import AntTooltip, { TooltipProps as AntTooltipProps } from 'antd/lib/tooltip';
 import { Condition } from './Condition';
 import './Tooltip.scss';
 
-export type PopoverProps = AntTooltipProps & {
+export type TooltipProps = AntTooltipProps & {
   show?: boolean;
 }
 
-export const Tooltip: FC<PopoverProps> = ({ children, show = true, ...other }) => {
+export const Tooltip: FC<TooltipProps> = ({ children, show = true, ...other }) => {
   return (
     <Condition
       condition={show}

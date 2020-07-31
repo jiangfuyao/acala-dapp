@@ -6,7 +6,7 @@ import { Card } from '@acala-dapp/ui-components';
 
 import classes from './StakingOverview.module.scss';
 import { useStakingTotalAmount, useConstants, useStakingValue, useStakingRewardAPR } from '@acala-dapp/react-hooks';
-import { FormatBalance, FormatFixed18, TokenName } from '@acala-dapp/react-components';
+import { FormatBalance, TokenName, FormatValue, FormatRatio } from '@acala-dapp/react-components';
 import { Balance as BalanceBlock } from '@acala-dapp/react-components/WalletBalance';
 import balanceClasses from '@acala-dapp/react-components/WalletBalance.module.scss';
 
@@ -23,10 +23,9 @@ const Stake: FC = () => {
         className={classes.stakingAmount}
         currency={stakingCurrency}
       />
-      <FormatFixed18
+      <FormatValue
         className={classes.stakingValue}
         data={value}
-        prefix='≈US $'
       />
     </div>
   );
@@ -83,11 +82,9 @@ const Property: FC = () => {
           </div>
           <div className={clsx(classes.inner, classes.APR)}>
             <p className={classes.label}>Net APR</p>
-            <FormatFixed18
+            <FormatRatio
               className={classes.data}
               data={APR}
-              format='percentage'
-              withTooltip={false}
             />
           </div>
         </div>

@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { CurrencyId } from '@acala-network/types/interfaces';
 
 import { Card, nextTick, IconButton, Condition } from '@acala-dapp/ui-components';
-import { BalanceInput, TxButton, numToFixed18Inner, DexExchangeRate, FormatFixed18, TokenName, FormatBalance } from '@acala-dapp/react-components';
+import { BalanceInput, TxButton, numToFixed18Inner, DexExchangeRate, FormatBalance } from '@acala-dapp/react-components';
 import { useFormValidator, useBalance, usePrice } from '@acala-dapp/react-hooks';
 import { Fixed18, convertToFixed18 } from '@acala-network/app-util';
 import { CurrencyLike } from '@acala-dapp/react-hooks/types';
@@ -79,7 +79,11 @@ const InputArea: FC<InputAreaProps> = ({
 
         <Condition condition={!!maxInput}>
           <p>
-            Max: <FormatFixed18 data={maxInput} /> <TokenName currency={token} />
+            Max:
+            <FormatBalance
+              balance={maxInput as Fixed18}
+              currency={token}
+            />
           </p>
         </Condition>
       </div>
