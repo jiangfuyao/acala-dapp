@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import clsx from 'clsx';
 
 import { BareProps } from './types';
-import classes from './Page.module.scss';
+import './Page.scss';
 
 interface TitleProps extends BareProps {
   title: string;
@@ -14,7 +14,7 @@ interface TitleProps extends BareProps {
  */
 const Title: FC<TitleProps> = ({ title }) => {
   return (
-    <div className={classes.pageTitle}>
+    <div className={'aca-page__title'}>
       <p className='page-title--content'>{title}</p>
     </div>
   );
@@ -26,8 +26,10 @@ const Title: FC<TitleProps> = ({ title }) => {
  */
 const _Page: FC<BareProps> = ({ children }) => {
   return (
-    <div className={classes.page}>
-      {children}
+    <div className={'aca-page'}>
+      <div className={'aca-page__container'}>
+        {children}
+      </div>
     </div>
   );
 };
@@ -38,7 +40,7 @@ const _Page: FC<BareProps> = ({ children }) => {
  */
 const Content: FC<BareProps & { fullscreen?: boolean }> = ({ children, fullscreen }) => {
   return (
-    <div className={clsx(classes.pageContent, { [classes.fullscreen]: fullscreen })}>
+    <div className={clsx('aca-page__content', { fullscreen: fullscreen })}>
       {children}
     </div>
   );
@@ -60,7 +62,7 @@ Page.Content = Content;
  */
 export const SubTitle: FC<BareProps> = ({ children, className }) => {
   return (
-    <p className={clsx(classes.subTitle, className)}>{children}</p>
+    <p className={clsx('aca-page__sub-title', className)}>{children}</p>
   );
 };
 

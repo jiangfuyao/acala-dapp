@@ -19,35 +19,33 @@ export const Balance: FC<BalanceProps> = ({ className, currency }) => {
 
   return (
     <div className={className}>
-      <div className={classes.inner}>
-        <TokenImage
-          className={classes.image}
+      <TokenImage
+        className={classes.image}
+        currency={currency}
+      />
+      <div className={classes.content}>
+        <TokenName
+          className={classes.name}
           currency={currency}
         />
-        <div className={classes.content}>
-          <TokenName
-            className={classes.name}
-            currency={currency}
-          />
-          <UserAssetBalance
-            className={classes.balance}
-            currency={currency}
-          />
-          <Condition
-            condition={tokenEq(currency, liquidCurrency)}
-            or={
-              <UserAssetValue
-                className={classes.amount}
-                currency={currency}
-              />
-            }>
-            <StakingPoolExchangeRate
+        <UserAssetBalance
+          className={classes.balance}
+          currency={currency}
+        />
+        <Condition
+          condition={tokenEq(currency, liquidCurrency)}
+          or={
+            <UserAssetValue
               className={classes.amount}
-              liquidAmount={liquidBalance}
-              showLiquidAmount={false}
+              currency={currency}
             />
-          </Condition>
-        </div>
+          }>
+          <StakingPoolExchangeRate
+            className={classes.amount}
+            liquidAmount={liquidBalance}
+            showLiquidAmount={false}
+          />
+        </Condition>
       </div>
     </div>
   );

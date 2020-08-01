@@ -1,6 +1,6 @@
 @import './styles/index.scss';
 
-.page {
+.aca-page {
   box-sizing: border-box;
   max-height: 100vh;
   min-height: 100vh;
@@ -10,7 +10,12 @@
   background: $platform-background-color;
 }
 
-.pageTitle, .subTitle {
+.aca-page__container {
+  margin: 0 auto;
+  max-width: 1120px;
+}
+
+.aca-page__title, .aca-page__sub-title {
   display: flex;
   align-items: center;
   font-size: 24px;
@@ -19,11 +24,11 @@
   color: #333333;
 }
 
-.pageTitle {
+.aca-page__title {
   margin: 32px 0 24px 0;
 }
 
-.pageContent {
+.aca-page__content {
   margin-top: 16px;
 
   &.fullscreen {

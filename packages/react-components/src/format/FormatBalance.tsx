@@ -42,14 +42,14 @@ export const FormatBalance: FC<FormatBalanceProps> = ({
     const _balance = formatBalance(data?.balance);
 
     return (
-      <>
+      <span key={'format-balance-' + index}>
         <FormatNumber
           data={_balance}
           formatNumberConfig={{ ...formatBalanceConfig, decimalLength }}
         />
         {data.currency ? <span>{' '}{getTokenName(data.currency)}</span> : null}
         {(pairSymbol && index !== pairLength - 1) ? <span>{' '}{pairSymbol}{' '}</span> : null}
-      </>
+      </span>
     );
   };
 

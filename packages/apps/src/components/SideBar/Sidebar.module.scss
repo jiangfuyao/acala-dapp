@@ -10,11 +10,20 @@
   overflow: hidden;
   background: #ffffff;
   box-shadow: 0 20px 20px 0 rgba(13,28,90,0.09);
+
+  @include media-breakpoint-up('md') {
+    min-width: 68px;
+    max-width: 68px;
+  }
 }
 
 .logo {
   margin: 94px auto 44px auto;
   text-align: center;
+
+  @include media-breakpoint-up('md') {
+    display: none;
+  }
 }
 
 .item {
@@ -27,7 +36,7 @@
   font-size: $font-s;
   line-height: 20px;
   font-weight: 500;
-  color: $color-primary;
+  color: var(--color-primary);
   transition: all 200ms ease;
 
   & > svg {
@@ -53,17 +62,28 @@
     top: 0;
     width: 5px;
     height: 100%;
-    background: $color-primary;
+    background: var(--color-primary);
   }
 
-  @include link($color-primary, $color-primary, $color-primary, $color-primary);
+  @include link(var(--color-primary), var(--color-primary), var(--color-primary), var(--color-primary));
+
+  @include media-breakpoint-up('md') {
+    .title {
+      display: none;
+    }
+  }
 }
 
 .wallet {
-  & > p:first-child {
-    color: $color-primary;
-  }
   color: #abb4d1;
+
+  .title {
+    width: 160px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: var(--color-primary);
+  }
 }
 
 .products {
@@ -88,6 +108,10 @@
 
   & svg {
     margin: 0;
+  }
+
+  @include media-breakpoint-up('md') {
+    display: none;
   }
 }
 

@@ -29,4 +29,8 @@ p, span {
 :root {
   --color-primary: #173dc9;
   --color-primary-light: #2938ce;
+
+  --screen-small: 960px;
+  --screen-middle: 1440px;
+  --screen-large: 1920px;
 }

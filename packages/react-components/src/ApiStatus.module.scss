@@ -1,3 +1,5 @@
+@import '../../ui-components/src/styles/index.scss';
+
 .root {
   position: relative;
   font-size: 16px;
@@ -23,5 +25,11 @@
 
   &.connected::before {
     background: var(--color-primary);
+  }
+
+  @include media-breakpoint-up('md') {
+    p {
+      display: none;
+    }
   }
 }

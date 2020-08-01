@@ -1,13 +1,14 @@
-import React, { cloneElement, memo } from 'react';
+import React, { cloneElement, memo, useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { SideBarItem } from '@acala-dapp/apps/types/sidebar';
-import { Condition, Tooltip } from '@acala-dapp/ui-components';
+import { Condition, Tooltip, UIContext, UIData } from '@acala-dapp/ui-components';
 
 import classes from './Sidebar.module.scss';
 
-export const ProductItem: React.FC<SideBarItem & { showTitle?: boolean }> = memo(({ icon, isExternal, name, path, showTitle = true, target }) => {
+export const ProductItem: React.FC<SideBarItem & { showTitle?: boolean }> = memo(({ icon, isExternal, name, path, rel, showTitle = true, target }) => {
   const search = window.location.search;
+  const ui = useContext<UIData>(UIContext);
 
   if (isExternal) {
     return (
@@ -32,13 +33,21 @@ export const ProductItem: React.FC<SideBarItem & { showTitle?: boolean }> = memo
   }
 
   return (
-    <NavLink className={classes.item}
-      to={`${path as string}${search}`}>
-      {cloneElement(icon)}
-      <span className={classes.title}>
-        {name}
-      </span>
-    </NavLink>
+    <Tooltip
+      placement='right'
+      show={ui.breakpoint !== 'lg'}
+      title={rel === 'wallet' ? 'wallet' : name}
+    >
+      <NavLink className={classes.item}
+        rel={rel}
+        to={`${path as string}${search}`}
+      >
+        {cloneElement(icon)}
+        <span className={classes.title}>
+          {name}
+        </span>
+      </NavLink>
+    </Tooltip>
   );
 });
 

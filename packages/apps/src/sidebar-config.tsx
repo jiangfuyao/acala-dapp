@@ -17,27 +17,32 @@ export const sideBarConfig: SideBarConfig = {
     {
       icon: <LoanSVG />,
       name: 'Self Serviced Loan',
-      path: 'loan'
+      path: 'loan',
+      rel: 'loan'
     },
     {
       icon: <ExchangeSVG />,
       name: 'Swap',
-      path: 'swap'
+      path: 'swap',
+      rel: 'swap'
     },
     {
       icon: <DepositSVG />,
       name: 'Deposit & Earn',
-      path: 'deposit'
+      path: 'deposit',
+      rel: 'deposit'
     },
     {
       icon: <LiquidSVG />,
       name: 'Liquid DOT',
-      path: 'homa'
+      path: 'homa',
+      rel: 'homa'
     },
     {
       icon: <GovernanceSVG />,
       name: 'Governance',
-      path: 'governance'
+      path: 'governance',
+      rel: 'governance'
     }
     // {
     //   icon: <LoanSVG />,
@@ -51,6 +56,7 @@ export const sideBarConfig: SideBarConfig = {
       isExternal: true,
       name: 'Faucet',
       path: 'https://discord.gg/CmqXvMP',
+      rel: 'faucet',
       target: '_blank'
     },
     {
@@ -58,6 +64,7 @@ export const sideBarConfig: SideBarConfig = {
       isExternal: true,
       name: 'Wiki',
       path: 'https://github.com/AcalaNetwork/Acala/wiki',
+      rel: 'wiki',
       target: '_blank'
     },
     {
@@ -65,6 +72,7 @@ export const sideBarConfig: SideBarConfig = {
       isExternal: true,
       name: 'Email',
       path: 'mailto:hello@acala.network',
+      rel: 'email',
       target: '_blank'
     },
     {
@@ -72,6 +80,7 @@ export const sideBarConfig: SideBarConfig = {
       isExternal: true,
       name: 'Twitter',
       path: 'https://twitter.com/AcalaNetwork',
+      rel: 'twitter',
       target: '_blank'
     }
   ]

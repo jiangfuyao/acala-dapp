@@ -1,11 +1,11 @@
 import React, { FC, useMemo, Children, useRef, cloneElement, ReactElement, useState, ReactNode, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
+import { uniqueId, debounce } from 'lodash';
 
 import { Card, CardProps } from './Card';
 import { BareProps } from './types';
 import { Controller } from './Controller';
 import './ScrollCard.scss';
-import { uniqueId } from 'lodash';
 
 export interface ScrollCardItemProps extends BareProps {
   key: string | number;
@@ -19,6 +19,8 @@ const Item: FC<ScrollCardItemProps> = ({
   return cloneElement(instance, { className: clsx('aca-scroll-card__item', className) });
 };
 
+const MIN_PAGE = 0;
+
 interface ScrollCardProps extends CardProps {
   pageSize?: number;
   itemClassName?: string;
@@ -28,9 +30,9 @@ interface ScrollCardProps extends CardProps {
 export const _ScrollCard: FC<ScrollCardProps> = ({ children, itemClassName, pageSize = 4, ...other }) => {
   const idRef = useRef<string>(uniqueId());
   const $rootRef = useRef<HTMLDivElement>(null);
-  const [maxPage, setMaxPage] = useState<number>(0);
-  const currentPageRef = useRef<number>(0);
-  const [page, setPage] = useState<number>(0);
+  const [maxPage, setMaxPage] = useState<number>(MIN_PAGE);
+  const currentPageRef = useRef<number>(MIN_PAGE);
+  const [page, setPage] = useState<number>(MIN_PAGE);
 
   const content = useMemo(() => {
     return Children.map(children as ReactElement[], (item: ReactElement, index: number) => {
@@ -45,7 +47,7 @@ export const _ScrollCard: FC<ScrollCardProps> = ({ children, itemClassName, page
     if (!$rootRef.current) return;
 
     const $root = $rootRef.current;
-    /* eslint-disable-next-line */
+    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
     const $container = $rootRef.current.querySelector('.aca-scroll-card__content')!;
 
     setPage(page);
@@ -71,35 +73,49 @@ export const _ScrollCard: FC<ScrollCardProps> = ({ children, itemClassName, page
   }, [maxPage, move]);
 
   useEffect(() => {
-    const inner = (): void => {
-      if (!$rootRef.current) return;
+    if (!$rootRef.current) return;
 
-      const $root = $rootRef.current;
-      const $container = $root.querySelector('.aca-scroll-card__container');
+    const $root = $rootRef.current;
+    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+    const $container = $root.querySelector('.aca-scroll-card__content')!;
+
+    const inner = debounce((): void => {
+      const $rootWidth = $root.clientWidth;
       const $items = $root.querySelectorAll('.aca-scroll-card__item');
+      const $containerWidth = Array.from($items).reduce((acc, cur) => acc + (cur.clientWidth || 0), 0);
+      const page = Math.floor($containerWidth / $rootWidth);
 
-      const _itemWidth = Number($root.clientWidth) / pageSize - 48;
+      setMaxPage(page);
+    }, 200);
 
-      // set items width;
-      ($container as HTMLDivElement).style.display = 'none';
-      $root.style.width = $root.clientWidth + 'px';
-      ($container as HTMLDivElement).style.width = _itemWidth * $items.length + 'px';
-      $items.forEach((item) => {
-        (item as HTMLDivElement).style.width = _itemWidth + 'px';
-        (item as HTMLDivElement).style.flex = `0 0 ${_itemWidth}px`;
-      });
-      ($container as HTMLDivElement).style.display = 'flex';
+    const reCalculationPage = debounce((): void => {
+      const $rootWidth = $root.clientWidth;
+      const scrollLeft = $container.scrollLeft;
 
-      // set max page size
-      setMaxPage(Math.floor($items.length / pageSize));
-    };
+      let page = MIN_PAGE;
+
+      page = Math.floor(scrollLeft / $rootWidth);
+
+      if (scrollLeft > $rootWidth * Math.floor(scrollLeft / $rootWidth)) {
+        page += 1;
+      }
+
+      setPage(page);
+      currentPageRef.current = page;
+    }, 200);
 
     inner();
 
     window.addEventListener('resize', inner);
+    window.addEventListener('resize', reCalculationPage);
+    $container.addEventListener('scroll', reCalculationPage);
 
-    return (): void => window.removeEventListener('resize', inner);
-  }, [$rootRef, setMaxPage, pageSize]);
+    return (): void => {
+      window.removeEventListener('resize', inner);
+      window.removeEventListener('resize', reCalculationPage);
+      $container.removeEventListener('resize', reCalculationPage);
+    };
+  }, [children, $rootRef, setMaxPage, pageSize, move]);
 
   return (
     <Card
