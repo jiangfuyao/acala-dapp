@@ -7,6 +7,7 @@ describe('test utils', () => {
     expect(formatNumber(1000.00, { decimalLength: 2, removeEmptyDecimalParts: false, removeTailZero: true})).toEqual('1,000')
     expect(formatNumber(1000.00, { decimalLength: 2, removeEmptyDecimalParts: true, removeTailZero: false})).toEqual('1,000')
     expect(formatNumber(1000.00, { decimalLength: 2, removeEmptyDecimalParts: true, removeTailZero: true })).toEqual('1,000')
+    expect(formatNumber(0.012, { decimalLength: 6, removeEmptyDecimalParts: true, removeTailZero: true })).toEqual('1,000')
     expect(formatNumber('1000.00', { decimalLength: 6, removeEmptyDecimalParts: false, removeTailZero: false })).toEqual('1,000.000000')
     expect(formatNumber(Fixed18.fromNatural(1000), { decimalLength: 6, removeEmptyDecimalParts: false, removeTailZero: false })).toEqual('1,000.000000')
     expect(formatNumber(1000.123456789, { decimalLength: 6, removeEmptyDecimalParts: true, removeTailZero: true })).toEqual('1,000.123456')

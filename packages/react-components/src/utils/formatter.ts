@@ -21,7 +21,7 @@ export interface FormatNumberConfig {
 }
 
 export const formatNumber = (num: string | number | Fixed18 | undefined, config: FormatNumberConfig = { decimalLength: 6, removeEmptyDecimalParts: true, removeTailZero: true }): string => {
-  const _num: string = num ? (num instanceof Fixed18) ? num.toString(18, 2) : Fixed18.fromNatural(num).toString(18, 2) : '0';
+  const _num: string = num ? (num instanceof Fixed18) ? num.toFixed(18, 2) : Fixed18.fromNatural(num).toFixed(18, 2) : '0';
 
   let [i, d] = _num.split('.');
 

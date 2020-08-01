@@ -8,8 +8,6 @@ import { WalletProvider, WalletContext } from './components/WalletContext';
 const Inner: FC = () => {
   const { changeTab, tab } = useContext(WalletContext);
 
-  console.log('tab', tab);
-
   return (
     <Page>
       <Page.Title title='Wallet' />
