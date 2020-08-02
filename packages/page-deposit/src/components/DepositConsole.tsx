@@ -1,4 +1,4 @@
-import React, { FC, memo, useState, useContext } from 'react';
+import React, { FC, memo, useState, useContext, useCallback } from 'react';
 import { noop } from 'lodash';
 import { useFormik } from 'formik';
 
@@ -6,7 +6,7 @@ import { CurrencyId } from '@acala-network/types/interfaces';
 import { Fixed18 } from '@acala-network/app-util';
 
 import { Card, nextTick } from '@acala-dapp/ui-components';
-import { useDexExchangeRate, useFormValidator } from '@acala-dapp/react-hooks';
+import { useDexExchangeRate, useFormValidator, useBalance } from '@acala-dapp/react-hooks';
 import { BalanceInput, TxButton, numToFixed18Inner, DexExchangeRate, DexPoolSize, DexUserShare, UserBalance } from '@acala-dapp/react-components';
 
 import classes from './DepositConsole.module.scss';
@@ -20,9 +20,11 @@ interface InputAreaProps {
   name: string;
   currencies?: (CurrencyId | string)[];
   value: number;
-  onChange: (event: React.ChangeEvent<any>) => void;
+  onChange: (value: number | string) => void;
   token: CurrencyId;
   onTokenChange?: (token: CurrencyId) => void;
+  maxValue?: number;
+  showMax?: boolean;
 }
 
 const InputArea: FC<InputAreaProps> = memo(({
@@ -33,9 +35,17 @@ const InputArea: FC<InputAreaProps> = memo(({
   name,
   onChange,
   onTokenChange,
+  showMax = true,
   token,
   value
 }) => {
+  const balance = useBalance(token);
+  const handleMax = useCallback(() => {
+    if (!onChange || !balance) return;
+
+    onChange(balance.toNumber());
+  }, [onChange, balance]);
+
   return (
     <div className={classes.inputAreaRoot}>
       <div className={classes.inputAreaTitle}>
@@ -50,7 +60,9 @@ const InputArea: FC<InputAreaProps> = memo(({
         id={id}
         name={name}
         onChange={onChange}
+        onMax={handleMax}
         onTokenChange={onTokenChange}
+        showMaxBtn={showMax}
         token={token}
         value={value}
       />
@@ -85,18 +97,26 @@ export const DepositConsole: FC = memo(() => {
     validate: validator
   });
 
-  const handleOtherInput = (event: React.ChangeEvent<any>): void => {
-    const value = Number(event.target.value);
+  const handleOtherInput = (_value: number | string): void => {
+    const value = Number(_value);
 
-    form.handleChange(event);
-    nextTick(() => { form.setFieldValue('base', Fixed18.fromNatural(value).mul(rate).toNumber()); });
+    nextTick(() => {
+      form.setValues({
+        base: Fixed18.fromNatural(value).mul(rate).toNumber(),
+        other: value
+      });
+    });
   };
 
-  const handleBaseInput = (event: React.ChangeEvent<any>): void => {
-    const value = Number(event.target.value);
+  const handleBaseInput = (_value: number | string): void => {
+    const value = Number(_value);
 
-    form.handleChange(event);
-    nextTick(() => { form.setFieldValue('other', Fixed18.fromNatural(value).div(rate).toNumber()); });
+    nextTick(() => {
+      form.setValues({
+        base: value,
+        other: Fixed18.fromNatural(value).div(rate).toNumber()
+      });
+    });
   };
 
   const handleSuccess = (): void => {

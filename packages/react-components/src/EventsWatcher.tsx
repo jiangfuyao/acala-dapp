@@ -47,7 +47,7 @@ export const EventsWatcher: FC = () => {
       return;
     }
 
-    api.query.system.events<Vec<EventRecord>>().subscribe({
+    const subscriber = api.query.system.events<Vec<EventRecord>>().subscribe({
       next: (events: Vec<EventRecord>): void => {
         handler([
           {
@@ -71,6 +71,10 @@ export const EventsWatcher: FC = () => {
         ])(events);
       }
     });
+
+    return (): void => {
+      subscriber.unsubscribe();
+    };
   }, [api, active]);
 
   return <></>;

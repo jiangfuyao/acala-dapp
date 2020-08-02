@@ -37,7 +37,7 @@ type Config = {
 }
 
 export function getFormValidator<T> (config: Config, api: ApiRx, active: InjectedAccountWithMeta): (values: T) => void | object | Promise<FormikErrors<T>> {
-  const numberPattern = /^([1-9]\d*|0)(\.\d{1,6})?$/;
+  const numberPattern = /^([1-9]\d*|0)(\.\d*)?$/;
 
   return (values: any): void | object | Promise<FormikErrors<T>> => {
     const error = {} as any;

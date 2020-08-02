@@ -1,7 +1,7 @@
 import React, { cloneElement, memo } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { SideBarItem } from '@acala-dapp/apps/types/sidebar';
+import { SideBarItem } from '../../types/sidebar';
 import { Condition, Tooltip } from '@acala-dapp/ui-components';
 
 import classes from './Sidebar.module.scss';

@@ -30,3 +30,4 @@ export * from './Animation';
 export * from './notification';
 export * from './Select';
 export * from './ScrollCard';
+export * from './NumberInput';

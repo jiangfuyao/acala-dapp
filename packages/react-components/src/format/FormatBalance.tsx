@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactNode } from 'react';
 
 import { Balance as BalanceType } from '@polkadot/types/interfaces';
 import { Fixed18 } from '@acala-network/app-util';
@@ -38,19 +38,19 @@ export const FormatBalance: FC<FormatBalanceProps> = ({
 }) => {
   const pairLength = pair ? pair.length : 0;
 
-  const renderBalance = (data: BalancePair, index: number): ReactElement => {
+  const renderBalance = (data: BalancePair, index: number): ReactNode => {
     const _balance = formatBalance(data?.balance);
 
-    return (
+    return [
       <span key={'format-balance-' + index}>
         <FormatNumber
           data={_balance}
           formatNumberConfig={{ ...formatBalanceConfig, decimalLength }}
         />
         {data.currency ? <span>{' '}{getTokenName(data.currency)}</span> : null}
-        {(pairSymbol && index !== pairLength - 1) ? <span>{' '}{pairSymbol}{' '}</span> : null}
-      </span>
-    );
+      </span>,
+      (pairSymbol && index !== pairLength - 1) ? <span key={'format-balance-symbol-' + index}>{' '}{pairSymbol}{' '}</span> : null
+    ];
   };
 
   return (

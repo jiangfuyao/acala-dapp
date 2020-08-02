@@ -5,7 +5,7 @@ import clsx from 'clsx';
 
 import { Fixed18 } from '@acala-network/app-util';
 import { List, Button, Grid, Condition } from '@acala-dapp/ui-components';
-import { NBalanceInput, FormatAddress, FormatBalance, BalanceInput } from '@acala-dapp/react-components';
+import { BalanceInput, FormatAddress, FormatBalance } from '@acala-dapp/react-components';
 
 import classes from './RenBtc.module.scss';
 import { useFormValidator, useAccounts } from '@acala-dapp/react-hooks';
@@ -25,13 +25,14 @@ const Alert: FC = () => {
     </div>
   );
 };
-/* eslint-enable react/no-unescaped-entities */
+
+const MAX_BTC_AMOUNT = 10000000;
 
 const InputStep: FC = () => {
   const { setAmount, setStep } = useContext(RenBtcMintContext);
   const validator = useFormValidator({
     amount: {
-      max: 100000000,
+      max: MAX_BTC_AMOUNT,
       min: 0,
       type: 'number'
     }
@@ -50,7 +51,7 @@ const InputStep: FC = () => {
     return !form.values.amount;
   }, [form]);
 
-  const handleInput = useCallback((value?: number) => {
+  const handleInput = useCallback((value: number) => {
     form.setFieldValue('amount', value);
   }, [form]);
 
@@ -63,9 +64,13 @@ const InputStep: FC = () => {
     <div className={classes.step}>
       <Grid container>
         <Grid item>
-          <NBalanceInput
+          <BalanceInput
             className={classes.input}
             error={form.errors.amount}
+            numberInputProps={{
+              max: MAX_BTC_AMOUNT,
+              min: 0
+            }}
             onChange={handleInput}
             token='BTC'
             value={form.values.amount}

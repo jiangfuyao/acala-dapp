@@ -1,4 +1,4 @@
-import React, { FC, memo, ReactElement, ChangeEvent } from 'react';
+import React, { FC, memo, ReactElement } from 'react';
 import { useFormik } from 'formik';
 import { noop } from 'lodash';
 
@@ -21,7 +21,7 @@ export const SlippageInputArea: FC<Props> = memo(({ onChange, slippage = 0.005 }
   const suggestedIndex = 1;
   const validator = useFormValidator({
     custom: {
-      equalMax: false,
+      equalMax: true,
       equalMin: true,
       max: SLIPPAGE_MAX,
       min: SLIPPAGE_MIN,
@@ -45,8 +45,8 @@ export const SlippageInputArea: FC<Props> = memo(({ onChange, slippage = 0.005 }
     return `${num * 100}%${num === suggestValues[suggestedIndex] ? ' (suggested)' : ''}`;
   };
 
-  const handleInput = (e: ChangeEvent<HTMLInputElement>): void => {
-    const value = Number(e.target.value);
+  const handleInput = (_value: number | string): void => {
+    const value = Number(_value);
 
     if (value < SLIPPAGE_MIN) {
       onChange && onChange(SLIPPAGE_MIN / 100);
@@ -63,7 +63,8 @@ export const SlippageInputArea: FC<Props> = memo(({ onChange, slippage = 0.005 }
     }
 
     onChange && onChange(value / 100);
-    form.handleChange(e);
+
+    form.setFieldValue('custom', value);
   };
 
   return (
@@ -86,6 +87,8 @@ export const SlippageInputArea: FC<Props> = memo(({ onChange, slippage = 0.005 }
           error={!!form.errors.custom}
           id='custom'
           label='%'
+          max={SLIPPAGE_MAX}
+          min={SLIPPAGE_MIN}
           name='custom'
           onChange={handleInput}
           placeholder='Custom'

@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState, useMemo } from 'react';
+import React, { FC, useContext, useState, useMemo, useCallback } from 'react';
 import { noop } from 'lodash';
 import { useFormik } from 'formik';
 
@@ -62,6 +62,7 @@ export const RedeemConsole: FC = () => {
       type: 'balance'
     },
     target: {
+      equalMin: true,
       min: stakingPoolHelper?.currentEra,
       type: 'number'
     }
@@ -99,6 +100,10 @@ export const RedeemConsole: FC = () => {
     return stakingPoolHelper.claimFee(Fixed18.fromNatural(form.values.amount), targetEra);
   }, [stakingPoolHelper, targetEra, form.values.amount]);
 
+  const handleAmountInput = useCallback((value: number) => {
+    form.setFieldValue('amount', value);
+  }, [form]);
+
   if (!stakingPoolHelper || !stakingPool) {
     return null;
   }
@@ -129,6 +134,8 @@ export const RedeemConsole: FC = () => {
 
     return _params;
   };
+
+  console.log(form.errors);
 
   return (
     <Grid
@@ -182,7 +189,7 @@ export const RedeemConsole: FC = () => {
           error={form.errors.amount}
           id='amount'
           name='amount'
-          onChange={form.handleChange}
+          onChange={handleAmountInput}
           token={stakingPool.liquidCurrency}
           value={form.values.amount}
         />
@@ -197,18 +204,16 @@ export const RedeemConsole: FC = () => {
         item
         justity='center'
       >
-        <Grid item>
-          <TxButton
-            className={classes.txBtn}
-            disabled={checkDisabled()}
-            method='redeem'
-            onSuccess={form.resetForm}
-            params={getParams()}
-            section='homa'
-          >
-            Redeem
-          </TxButton>
-        </Grid>
+        <TxButton
+          className={classes.txBtn}
+          disabled={checkDisabled()}
+          method='redeem'
+          onSuccess={form.resetForm}
+          params={getParams()}
+          section='homa'
+        >
+          Redeem
+        </TxButton>
       </Grid>
       <Grid
         className={classes.info}

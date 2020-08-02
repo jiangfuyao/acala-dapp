@@ -2,7 +2,7 @@ import React, { FC, useCallback, useMemo } from 'react';
 import { noop, upperFirst } from 'lodash';
 import { useFormik } from 'formik';
 
-import { NBalanceInput, TxButton, numToFixed18Inner, LAMINAR_WATCHER_ADDRESS, getTokenName, FormatBalance } from '@acala-dapp/react-components';
+import { BalanceInput, TxButton, numToFixed18Inner, LAMINAR_WATCHER_ADDRESS, getTokenName, FormatBalance } from '@acala-dapp/react-components';
 import { useConstants, useFormValidator, useBalance } from '@acala-dapp/react-hooks';
 import { Card, Select, Grid, List } from '@acala-dapp/ui-components';
 
@@ -86,7 +86,7 @@ export const AUSD: FC = () => {
               </p>
             </Grid>
             <Grid item>
-              <NBalanceInput
+              <BalanceInput
                 error={form.errors.amount}
                 onChange={handleInput}
                 token={stableCurrency}

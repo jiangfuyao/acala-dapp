@@ -8,10 +8,10 @@ const FormatRatioConfig: FormatNumberProps['formatNumberConfig'] = {
   removeTailZero: true
 };
 
-export const FormatRatio: FC<FormatNumberProps> = (props) => {
+export const FormatRatio: FC<FormatNumberProps> = ({ data, ...props }) => {
   const _data = useMemo(() => {
-    return (props.data instanceof Fixed18 ? props.data : Fixed18.fromNatural(props.data || 0)).mul(Fixed18.fromNatural(100));
-  }, [props.data]);
+    return (data instanceof Fixed18 ? data : Fixed18.fromNatural(data || 0)).mul(Fixed18.fromNatural(100));
+  }, [data]);
 
   return (
     <FormatNumber

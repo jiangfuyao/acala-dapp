@@ -1,5 +1,5 @@
-import React, { memo, createContext, FC, PropsWithChildren, useState, useEffect, useCallback, useMemo } from 'react';
-import { Observable, combineLatest } from 'rxjs';
+import React, { memo, createContext, FC, PropsWithChildren, useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { Observable, combineLatest, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Vec } from '@polkadot/types';
@@ -46,6 +46,7 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
   const { api } = useApi();
   const { isInitialized, setEnd } = useInitialize();
   const { dexBaseCurrency } = useConstants();
+  const subscriberRef = useRef<Subscription>();
 
   const supplyCurrencies = useMemo(() => {
     const result = (api.consts.dex.enabledCurrencyIds as Vec<CurrencyId>).toArray();
@@ -69,9 +70,13 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
   });
 
   const setCurrency = useCallback((supply: CurrencyId, target: CurrencyId): void => {
+    if (subscriberRef.current) {
+      subscriberRef.current.unsubscribe();
+    }
+
     // base to other
     if (tokenEq(supply, dexBaseCurrency) && !tokenEq(target, dexBaseCurrency)) {
-      ((api.derive as any).dex.pool(target) as Observable<DerivedDexPool>).subscribe((pool) => {
+      const subscriber = ((api.derive as any).dex.pool(target) as Observable<DerivedDexPool>).subscribe((pool) => {
         setPool({
           supplyCurrency: supply,
           supplySize: convertToFixed18(pool.base).toNumber(),
@@ -79,11 +84,13 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
           targetSize: convertToFixed18(pool.other).toNumber()
         });
       });
+
+      subscriberRef.current = subscriber;
     }
 
     // other to base
     if (tokenEq(target, dexBaseCurrency) && !tokenEq(supply, dexBaseCurrency)) {
-      ((api.derive as any).dex.pool(supply) as Observable<DerivedDexPool>).subscribe((pool) => {
+      const subscriber = ((api.derive as any).dex.pool(supply) as Observable<DerivedDexPool>).subscribe((pool) => {
         setPool({
           supplyCurrency: supply,
           supplySize: convertToFixed18(pool.other).toNumber(),
@@ -91,11 +98,13 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
           targetSize: convertToFixed18(pool.base).toNumber()
         });
       });
+
+      subscriberRef.current = subscriber;
     }
 
     // other to other
     if (!tokenEq(target, dexBaseCurrency) && !tokenEq(supply, dexBaseCurrency)) {
-      combineLatest([
+      const subscriber = combineLatest([
         (api.derive as any).dex.pool(supply) as Observable<DerivedDexPool>,
         (api.derive as any).dex.pool(target) as Observable<DerivedDexPool>
       ]).subscribe(([supplyPool, targetPool]) => {
@@ -106,6 +115,8 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
           targetSize: convertToFixed18(targetPool.other).toNumber()
         });
       });
+
+      subscriberRef.current = subscriber;
     }
 
     if (tokenEq(supply, dexBaseCurrency) && tokenEq(target, dexBaseCurrency)) {

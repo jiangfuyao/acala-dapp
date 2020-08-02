@@ -7,7 +7,7 @@ import { stableCoinToDebit, Fixed18, convertToFixed18, calcLiquidationPrice, cal
 
 import { Dialog, ButtonProps, Button, List } from '@acala-dapp/ui-components';
 import { useModal, useFormValidator, useConstants, useBalance, useLoanHelper } from '@acala-dapp/react-hooks';
-import { NBalanceInput, TxButton, FormatBalance, FormatRatio, FormatPrice } from '@acala-dapp/react-components';
+import { BalanceInput, TxButton, FormatBalance, FormatRatio, FormatPrice } from '@acala-dapp/react-components';
 
 import classes from './LoanActionButton.module.scss';
 
@@ -220,7 +220,7 @@ export const LonaActionButton: FC<Props> = ({
     form.setFieldValue('value', maxInput);
   };
 
-  const handleChange = (value?: number): void => {
+  const handleChange = (value: number): void => {
     form.setFieldValue('value', value);
   };
 
@@ -258,7 +258,7 @@ export const LonaActionButton: FC<Props> = ({
         title={dialogTitle}
         visiable={status}
       >
-        <NBalanceInput
+        <BalanceInput
           error={form.errors.value}
           id='value'
           name='value'

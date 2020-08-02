@@ -55,7 +55,6 @@
 
   & > .balanceContainer {
     display: flex;
-    margin-left: -24px;
   }
 
   & .balanceBlock {
@@ -135,7 +134,7 @@
     & > .data {
       display: block;
       margin-top: 20px;
-      font-size: 28px;
+      font-size: 24px;
       line-height: 34px;
       color: var(--color-primary);
       font-weight: bold;

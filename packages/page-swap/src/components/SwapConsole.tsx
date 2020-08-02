@@ -1,4 +1,4 @@
-import React, { FC, memo, useContext, ReactElement, ChangeEvent, ReactNode, useState, useCallback, useMemo } from 'react';
+import React, { FC, memo, useContext, ReactElement, ReactNode, useState, useCallback, useMemo } from 'react';
 import { noop } from 'lodash';
 import { useFormik } from 'formik';
 
@@ -54,9 +54,9 @@ interface InputAreaProps {
   token: CurrencyId | string;
   onTokenChange: (token: CurrencyId) => void;
   value: number;
-  onChange: any;
+  onChange: (value: number) => void;
   inputName: string;
-  showBalance?: boolean;
+  showMax?: boolean;
   maxInput?: Fixed18;
 }
 
@@ -68,10 +68,17 @@ const InputArea: FC<InputAreaProps> = ({
   maxInput,
   onChange,
   onTokenChange,
+  showMax = false,
   title,
   token,
   value
 }) => {
+  const handleMax = useCallback(() => {
+    if (!onChange || !maxInput) return;
+
+    onChange(maxInput.toNumber());
+  }, [maxInput, onChange]);
+
   return (
     <div className={classes.inputAreaRoot}>
       <div className={classes.title}>
@@ -94,7 +101,9 @@ const InputArea: FC<InputAreaProps> = ({
         error={error}
         name={inputName}
         onChange={onChange}
+        onMax={handleMax}
         onTokenChange={onTokenChange}
+        showMaxBtn={showMax}
         token={token}
         value={value}
       />
@@ -160,24 +169,20 @@ export const SwapConsole: FC = memo(() => {
     form.resetForm();
   }, [setCurrency, pool.targetCurrency, pool.supplyCurrency, form]);
 
-  const onSupplyChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    const value = Number(event.currentTarget.value);
-
+  const onSupplyChange = (value: number): void => {
     calcTarget(pool.supplyCurrency, pool.targetCurrency, value, slippage).subscribe((target) => {
       nextTick(() => form.setFieldValue('target', target));
     });
 
-    form.handleChange(event);
+    nextTick(() => form.setFieldValue('supply', value));
   };
 
-  const onTargetChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    const value = Number(event.currentTarget.value);
-
+  const onTargetChange = (value: number): void => {
     calcSupply(pool.supplyCurrency, pool.targetCurrency, value, slippage).subscribe((supply) => {
       nextTick(() => form.setFieldValue('supply', supply));
-    });
+    }).unsubscribe();
 
-    form.handleChange(event);
+    nextTick(() => form.setFieldValue('target', value));
   };
 
   const onSlippageChange = (slippage: number): void => {
@@ -186,7 +191,7 @@ export const SwapConsole: FC = memo(() => {
     setSlippage(slippage);
     calcTarget(pool.supplyCurrency, pool.targetCurrency, supply, slippage).subscribe((target) => {
       nextTick(() => form.setFieldValue('target', target));
-    });
+    }).unsubscribe();
   };
 
   const onSupplyTokenChange = (token: CurrencyId): void => {
@@ -194,7 +199,7 @@ export const SwapConsole: FC = memo(() => {
 
     calcSupply(token, pool.targetCurrency, form.values.target, slippage).subscribe((supply) => {
       if (supply) nextTick(() => form.setFieldValue('supply', supply));
-    });
+    }).unsubscribe();
   };
 
   const onTargetTokenChange = (token: CurrencyId): void => {
@@ -202,7 +207,7 @@ export const SwapConsole: FC = memo(() => {
 
     calcTarget(pool.supplyCurrency, token, form.values.supply, slippage).subscribe((target) => {
       if (target) nextTick(() => form.setFieldValue('target', target));
-    });
+    }).unsubscribe();
   };
 
   const isDisabled = useMemo((): boolean => {
@@ -232,6 +237,7 @@ export const SwapConsole: FC = memo(() => {
           maxInput={maxSupplyInput}
           onChange={onSupplyChange}
           onTokenChange={onSupplyTokenChange}
+          showMax={true}
           title='Pay With'
           token={pool.supplyCurrency}
           value={form.values.supply as number}

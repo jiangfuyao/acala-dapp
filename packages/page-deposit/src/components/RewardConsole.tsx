@@ -29,6 +29,7 @@ const InputArea: FC<InputAreaProps> = memo(({
           className={classes.dropdown}
           currencies={dexCurrencies}
           onChange={onTokenChange}
+          showIcon
           value={token}
         />
         <RightArrowIcon className={classes.arrowIcon} />

@@ -1,4 +1,4 @@
-import React, { FC, useState, useCallback, useMemo, useEffect, ChangeEventHandler } from 'react';
+import React, { FC, useState, useCallback, useMemo, useEffect } from 'react';
 import { noop } from 'lodash';
 import clsx from 'clsx';
 import { useFormik } from 'formik';
@@ -121,18 +121,18 @@ export const TwoWayBalanceInput: FC<TwoWayBalanceInputProps> = ({
     });
   }, [referenceMax, form, primaryMax]);
 
-  const handlePrimaryChange: ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
-    const value = Number(event.target.value);
-
-    form.setFieldValue('reference', Fixed18.fromNatural(value).mul(exchangeRate).toNumber(6, 3));
-    form.handleChange(event);
+  const handlePrimaryChange = useCallback((value: number) => {
+    form.setValues({
+      primary: value,
+      reference: Fixed18.fromNatural(value).mul(exchangeRate).toNumber(6, 3)
+    });
   }, [form, exchangeRate]);
 
-  const handleReferenceChange: ChangeEventHandler<HTMLInputElement> = useCallback((event) => {
-    const value = Number(event.target.value);
-
-    form.setFieldValue('primary', Fixed18.fromNatural(value).div(exchangeRate).toNumber(6, 3));
-    form.handleChange(event);
+  const handleReferenceChange = useCallback((value: number) => {
+    form.setValues({
+      primary: Fixed18.fromNatural(value).div(exchangeRate).toNumber(6, 3),
+      reference: value
+    });
   }, [form, exchangeRate]);
 
   // expose reset action to father component

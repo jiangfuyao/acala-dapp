@@ -201,6 +201,8 @@ export const TransferModal: FC<TransferModalProps> = ({
   }, [account, currency, amount]);
 
   const isDisabled = useMemo((): boolean => {
+    console.log(amount);
+
     if (!amount) {
       return true;
     }

@@ -19,7 +19,7 @@ interface InputAreaProps {
   name: string;
   currencies?: (CurrencyId | string)[];
   value: number;
-  onChange: (event: React.ChangeEvent<any>) => void;
+  onChange: (value: number) => void;
   token: CurrencyId;
   onTokenChange?: (token: CurrencyId) => void;
 }
@@ -107,8 +107,8 @@ export const RefundCollateral: FC = memo(() => {
     validate: validator
   });
 
-  const handleOtherInput = (event: React.ChangeEvent<any>): void => {
-    form.handleChange(event);
+  const handleOtherInput = (value: number): void => {
+    form.setFieldValue('stableCoin', value);
   };
 
   const handleMax = (): void => {

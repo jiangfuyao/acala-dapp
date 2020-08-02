@@ -7,13 +7,12 @@ import { Fixed18, convertToFixed18 } from '@acala-network/app-util';
 
 import { CurrencyLike } from '@acala-dapp/react-hooks/types';
 import { usePrice, useBalance, useConstants, useFormValidator } from '@acala-dapp/react-hooks';
-import { SwitchIcon, Condition, Input } from '@acala-dapp/ui-components';
+import { SwitchIcon, Condition } from '@acala-dapp/ui-components';
 
 import classes from './BalanceAmountInput.module.scss';
 import { BalanceInput } from './BalanceInput';
 import { TokenName } from './Token';
 import { FormatFixed18 } from './format';
-import { getTokenName } from './utils';
 
 type InputType = 'balance' | 'amount';
 
@@ -106,6 +105,14 @@ export const BalanceAmountInput: FC<BalanceAmountInputProps> = ({
   /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [maxAmount]);
 
+  const handleAmountChange = useCallback((value: number) => {
+    form.setFieldValue('amount', value);
+  }, [form]);
+
+  const handleBalanceChange = useCallback((value: number) => {
+    form.setFieldValue('balance', value);
+  }, [form]);
+
   const error = useMemo(() => {
     if (inputType === 'amount') {
       return form.errors.amount;
@@ -158,12 +165,13 @@ export const BalanceAmountInput: FC<BalanceAmountInputProps> = ({
             id='balance'
             name='balance'
             onBlur={hanleBlur}
-            onChange={form.handleChange}
+            onChange={handleBalanceChange}
             onFocus={handleFocus}
             onMax={handleBalanceMax}
             onTokenChange={handleCurrencyChange}
             showIcon={false}
             showMaxBtn
+            size='small'
             token={currency}
             value={form.values.balance}
           />
@@ -176,19 +184,18 @@ export const BalanceAmountInput: FC<BalanceAmountInputProps> = ({
           </div>
         </Condition>
         <Condition condition={inputType === 'amount'}>
-          <Input
+          <BalanceInput
             border={false}
-            className={classes.amountInput}
+            className={classes.balanceInput}
             error={form.errors.amount}
             id='amount'
             name='amount'
-            onChange={form.handleChange}
+            onChange={handleAmountChange}
             onMax={handleAmountMax}
+            showIcon={false}
             showMaxBtn
-            suffix={
-              getTokenName(stableCurrency)
-            }
-            type='number'
+            size='small'
+            token={stableCurrency}
             value={form.values.amount}
           />
           <BalanceInput

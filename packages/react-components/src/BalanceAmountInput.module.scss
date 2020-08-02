@@ -5,7 +5,7 @@
   border: 1px solid #E9E9E9;
   border-radius: 2px;
   display: grid;
-  grid-template-columns: 64px 1fr;
+  grid-template-columns: 64px calc(100% - 64px);
 
   &:hover, &.focused {
     border-color: var(--color-primary);
@@ -21,13 +21,14 @@
     cursor: pointer;
   }
 
-  .inputArea {
-    flex: 1;
-  }
-
   .balanceInput {
+    padding-left: 0 !important;
     height: 48px !important;
     border-bottom: 1px solid #E9E9E9 !important;
+    font-size: 16px !important;
+    input {
+      height: 46px !important;
+    }
   }
 
   .amountDisplay {
@@ -50,6 +51,7 @@
   }
 
   .balanceDisplay {
+    padding-left: 0 !important;
     height: 46px !important;
     border: none;
 

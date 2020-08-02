@@ -10,9 +10,9 @@ const formatValueConfig: FormatNumberProps['formatNumberConfig'] = {
 export const FormatValue: FC<Omit<FormatNumberProps, 'formartNumberConfig'>> = (props) => {
   return (
     <FormatNumber
-      {...props}
       formatNumberConfig={formatValueConfig}
       prefix={'≈US $'}
+      {...props}
     />
   );
 };

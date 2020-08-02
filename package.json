@@ -11,9 +11,9 @@
   },
   "resolutions": {
     "@polkadot/api": "^1.15.1",
-    "@acala-network/api": "^0.4.0",
-    "@acala-network/types": "^0.4.0",
-    "@acala-network/app-util": "^0.4.0"
+    "@acala-network/api": "0.4.0-beta.0",
+    "@acala-network/types": "0.4.0-beta.0",
+    "@acala-network/app-util": "0.4.0-beta.0"
   },
   "scripts": {
     "start:dapp": "cd packages/apps && react-app-rewired start",
