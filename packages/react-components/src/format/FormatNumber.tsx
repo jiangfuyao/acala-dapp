@@ -8,6 +8,8 @@ import { Tooltip, TooltipProps } from '@acala-dapp/ui-components';
 
 import classes from './format.module.scss';
 
+export type FormatterColor = 'primary' | 'error' | 'success';
+
 export type FormatNumberProps = {
   data: number | string | Fixed18 | undefined;
   formatNumberConfig?: FormatNumberConfig;
@@ -16,10 +18,12 @@ export type FormatNumberProps = {
 
   prefix?: string;
   suffix?: string;
+  color?: FormatterColor;
 } & BareProps;
 
 export const FormatNumber: FC<FormatNumberProps> = ({
   className,
+  color,
   data,
   formatNumberConfig,
   prefix = '',
@@ -33,7 +37,7 @@ export const FormatNumber: FC<FormatNumberProps> = ({
       title={(data instanceof Fixed18) ? data.toString(18, 2) : data}
       {...toolTipsProps}
     >
-      <span className={clsx(classes.number, className)}>
+      <span className={clsx(classes.number, className, color)}>
         {
           `${prefix}${formatNumber(data, formatNumberConfig)}${suffix}`
         }

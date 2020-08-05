@@ -102,7 +102,9 @@ export const SwapConsole: FC = memo(() => {
     calcSupply,
     calcTarget,
     pool,
+    priceImpact,
     setCurrency,
+    slippage,
     supplyCurrencies,
     targetCurrencies
   } = useContext(SwapContext);
@@ -184,6 +186,15 @@ export const SwapConsole: FC = memo(() => {
     return supplyCurrencyBalance ? convertToFixed18(supplyCurrencyBalance).min(Fixed18.fromNatural(pool.supplySize)) : undefined;
   }, [supplyCurrencyBalance, pool.supplySize]);
 
+  const params = useMemo(() => {
+    return [
+      pool.supplyCurrency,
+      numToFixed18Inner(form.values.supply),
+      pool.targetCurrency,
+      Fixed18.fromNatural(form.values.target).mul(Fixed18.fromNatural(1 + slippage)).innerToString()
+    ];
+  }, [form, pool, slippage]);
+
   return (
     <Card className={classes.root}
       padding={false}>
@@ -203,15 +214,13 @@ export const SwapConsole: FC = memo(() => {
         <SwapBtn onClick={onSwap} />
         <InputArea
           addon={
-            <>
-              <div className={classes.addon}>
-                <p>Exchange Rate</p>
-                <DexExchangeRate
-                  supply={pool.supplyCurrency}
-                  target={pool.targetCurrency}
-                />
-              </div>
-            </>
+            <div className={classes.addon}>
+              <p>Exchange Rate</p>
+              <DexExchangeRate
+                supply={pool.supplyCurrency}
+                target={pool.targetCurrency}
+              />
+            </div>
           }
           currencies={targetCurrencies}
           error={form.errors.target}
@@ -224,21 +233,15 @@ export const SwapConsole: FC = memo(() => {
         />
         <TxButton
           className={classes.txBtn}
+          color={priceImpact > 0.05 ? 'danger' : 'primary'}
           disabled={isDisabled}
           method='swapCurrency'
           onSuccess={form.resetForm}
-          params={
-            [
-              pool.supplyCurrency,
-              numToFixed18Inner(form.values.supply),
-              pool.targetCurrency,
-              numToFixed18Inner(form.values.target)
-            ]
-          }
+          params={params}
           section='dex'
           size='large'
         >
-          Swap
+          {priceImpact > 0.05 ? 'Swap Anyway' : 'Swap'}
         </TxButton>
       </div>
       <SwapInfo

@@ -27,7 +27,7 @@
   font-size: $font-s;
   line-height: 20px;
   font-weight: 500;
-  color: $color-primary;
+  color: var(--color-primary);
   transition: all 200ms ease;
 
   & > svg {
@@ -53,15 +53,15 @@
     top: 0;
     width: 5px;
     height: 100%;
-    background: $color-primary;
+    background: var(--color-primary);
   }
 
-  @include link($color-primary, $color-primary, $color-primary, $color-primary);
+  @include link(var(--color-primary), var(--color-primary), var(--color-primary), var(--color-primary));
 }
 
 .wallet {
   & > p:first-child {
-    color: $color-primary;
+    color: var(--color-primary);
   }
   color: #abb4d1;
 }

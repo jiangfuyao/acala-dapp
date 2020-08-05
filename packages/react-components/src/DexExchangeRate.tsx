@@ -28,11 +28,11 @@ export const DexExchangeRate: FC<Props> = memo(({ supply, target }) => {
 
     if (tokenEq(supply, dexBaseCurrency) && !tokenEq(_target, dexBaseCurrency) && targetPool) {
       setRatio(Fixed18.fromRational(
-        targetPool.base.toString(),
-        targetPool.other.toString()
+        targetPool.other.toString(),
+        targetPool.base.toString()
       ));
-      setSupplyToken(target);
-      setTargetToken(dexBaseCurrency);
+      setSupplyToken(dexBaseCurrency);
+      setTargetToken(_target);
     }
 
     if (tokenEq(_target, dexBaseCurrency) && !tokenEq(supply, dexBaseCurrency) && supplyPool) {

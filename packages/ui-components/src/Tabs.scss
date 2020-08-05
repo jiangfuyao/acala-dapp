@@ -2,7 +2,7 @@
 .aca-tabs {
   font-size: 16px;
   line-height: 26px;
-  color: #999999;
+  color: var(--text-color-second);
   font-weight: 400;
 
   .aca-tabs__tabs {
@@ -45,7 +45,7 @@
 
     &.active {
       background: #ffffff;
-      color: #333333;
+      color: var(--text-color-primary);
     }
   }
 }

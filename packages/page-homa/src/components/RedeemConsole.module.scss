@@ -2,7 +2,7 @@
   .notice {
     font-size: 16px;
     line-height: 19px;
-    color: #999999;
+    color: var(--text-color-second);
   }
 
   .eraInfo {
@@ -47,7 +47,7 @@
     padding-right: 0;
 
     & :global(.aca-list--label) {
-      color: #999999;
+      color: var(--text-color-second);
     }
   }
 

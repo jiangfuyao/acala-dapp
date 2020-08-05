@@ -1,11 +1,19 @@
-.primary {
-  color: var(--color-primary);
-}
-
 .icon {
   margin-right: 8px;
 }
 
-.number {
+.number, .balance {
   white-space: nowrap;
+
+  &:global(.primary) {
+    color: var(--color-primary);
+  }
+
+  &:global(.error) {
+    color: var(--color-error);
+  }
+
+  &:global(.success) {
+    color: var(--color-success);
+  }
 }

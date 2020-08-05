@@ -55,28 +55,28 @@
 
     &.active {
       .point {
-        background: $color-primary;
-        border-color: $color-primary;
+        background: var(--color-primary);
+        border-color: var(--color-primary);
         color: #ffffff;
       }
       .text {
         font-weight: 500px;
-        color: #333333;
+        color: var(--text-color-primary);
       }
     }
 
     &.done {
       .point {
-        border-color: $color-primary;
-        color: $color-primary;
+        border-color: var(--color-primary);
+        color: var(--color-primary);
 
         & path {
-          fill: $color-primary;
+          fill: var(--color-primary);
         }
       }
 
       .text {
-        color: #333333;
+        color: var(--text-color-primary);
       }
     }
   }
@@ -87,8 +87,8 @@
     line-height: 32px;
     text-align: center;
     border-radius: 100%;
-    border: 1px solid #999999;
-    color: #999999;
+    border: 1px solid var(--text-color-second);
+    color: var(--text-color-second);
   }
 
   .text {
@@ -96,6 +96,6 @@
     font-size: 16px;
     line-height: 19px;
     font-weight: 500;
-    color: #999999;
+    color: var(--text-color-second);
   }
 }

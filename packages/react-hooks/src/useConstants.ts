@@ -23,7 +23,7 @@ const CURRENCIES_WEIGHT = new Map<string, number>([
   ['XBTC', 4]
 ]);
 
-interface HooksReturnType {
+export type HooksReturnType = {
   allCurrencies: CurrencyId[];
   crossChainCurrencies: CurrencyId[];
   dexBaseCurrency: CurrencyId;
@@ -35,6 +35,7 @@ interface HooksReturnType {
   stableCurrency: CurrencyId;
   stakingCurrency: CurrencyId;
   liquidCurrency: CurrencyId;
+  [key: string]: any;
 }
 
 export const useConstants = (): HooksReturnType => {
@@ -94,6 +95,7 @@ export const useConstants = (): HooksReturnType => {
     minmumDebitValue,
     nativeCurrency,
     stableCurrency,
-    stakingCurrency
+    stakingCurrency,
+    ...api.consts
   };
 };

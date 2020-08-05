@@ -69,7 +69,8 @@ export const TxButton: FC<PropsWithChildren<Props>> = ({
   onSuccess,
   params,
   section,
-  size
+  size,
+  ...other
 }) => {
   const { api } = useApi();
   const { active } = useAccounts();
@@ -169,7 +170,7 @@ export const TxButton: FC<PropsWithChildren<Props>> = ({
           notification.error({
             duration: 4,
             key: notificationKey,
-            message: `Unknown Error Occured! ${error.message}`
+            message: `Unknown Error Occurred! ${error.message}`
           });
         }
 
@@ -200,6 +201,7 @@ export const TxButton: FC<PropsWithChildren<Props>> = ({
       loading={isSending}
       onClick={onClick}
       size={size}
+      {...other}
     >
       {children}
     </Button>

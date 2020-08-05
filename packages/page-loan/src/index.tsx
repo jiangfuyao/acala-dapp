@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 
-import { Page, Grid, Condition } from '@acala-dapp/ui-components';
+import { Page, Grid, Condition, Tabs } from '@acala-dapp/ui-components';
 
 import { LoanTopBar } from './components/LoanTopBar';
 import { CreateConsole } from './components/CreateConsole';
@@ -10,6 +10,7 @@ import { Overview } from './components/Overview';
 import { Transaction } from './components/Transaction';
 import { EmergencyShutdown } from './components/EmergencyShutdown';
 import { WalletBalance } from '@acala-dapp/react-components';
+import { LoanAlert } from './components/LoanAlert';
 
 const Inner: FC = () => {
   const { currentTab, isShutdown } = useContext(LoanContext);
@@ -18,58 +19,77 @@ const Inner: FC = () => {
     <Page>
       <Page.Title title='Self Serviced Loan' />
       <Page.Content>
-        <Condition
-          condition={isShutdown}
-          match={<EmergencyShutdown/>}
-          or={(
-            <Grid container>
-              <Condition
-                condition={currentTab !== 'create'}
-                match={
-                  <Grid item>
-                    <LoanTopBar />
+        <Grid container>
+          <LoanAlert />
+          <Grid item>
+            <Tabs
+              type='button'
+            >
+              {
+                isShutdown ? (
+                  <Tabs.Panel
+                    key='emergency'
+                    tab='Emergency Shutdown'
+                  >
+                    <EmergencyShutdown />
+                  </Tabs.Panel>
+                ) : null
+              }
+              <Tabs.Panel
+                disabled={isShutdown}
+                key='loans'
+                tab='My Loans'
+              >
+                <Grid container>
+                  <Condition
+                    condition={currentTab !== 'create'}
+                    match={
+                      <Grid item>
+                        <LoanTopBar />
+                      </Grid>
+                    }
+                  />
+
+                  <Grid>
+                    <WalletBalance />
                   </Grid>
-                }
-              />
 
-              <Grid>
-                <WalletBalance />
-              </Grid>
+                  <Condition
+                    condition={currentTab === 'overview'}
+                    match={(
+                      <Grid item>
+                        <Overview />
+                      </Grid>
+                    )}
+                  />
 
-              <Condition
-                condition={currentTab === 'overview'}
-                match={(
-                  <Grid item>
-                    <Overview />
-                  </Grid>
-                )}
-              />
+                  <Condition
+                    condition={currentTab === 'create'}
+                    match={(
+                      <Grid item>
+                        <CreateConsole />
+                      </Grid>
+                    )}
+                  />
 
-              <Condition
-                condition={currentTab === 'create'}
-                match={(
-                  <Grid item>
-                    <CreateConsole />
-                  </Grid>
-                )}
-              />
-
-              <Condition
-                condition={currentTab !== 'create' && currentTab !== 'overview'}
-                match={(
-                  <>
-                    <Grid item>
-                      <LoanConsole />
-                    </Grid>
-                    <Grid item>
-                      <Transaction />
-                    </Grid>
-                  </>
-                )}
-              />
-            </Grid>
-          )}
-        />
+                  <Condition
+                    condition={currentTab !== 'create' && currentTab !== 'overview'}
+                    match={(
+                      <>
+                        <Grid item>
+                          <LoanConsole />
+                        </Grid>
+                        <Grid item>
+                          <Transaction />
+                        </Grid>
+                      </>
+                    )}
+                  />
+                </Grid>
+              </Tabs.Panel>
+            </Tabs>
+          </Grid>
+        </Grid>
       </Page.Content>
     </Page>
   );

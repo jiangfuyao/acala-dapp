@@ -11,7 +11,7 @@
   }
 
   &.error {
-    border-color: #ff5500 !important;
+    border-color: var(--color-error) !important;
   }
 
   .switchArea {
@@ -56,7 +56,7 @@
     .tokenName {
       font-size: 24px;
       line-height: 29px;
-      color: #333333;
+      color: var(--text-color-primary);
     }
 
     .tokenImage {

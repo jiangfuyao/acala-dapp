@@ -16,7 +16,7 @@
     font-size: 14px;
     line-height: 16px; 
     font-weight: 400;
-    color: #333333;
+    color: var(--text-color-primary);
   }
 }
 
@@ -45,7 +45,7 @@
     margin-top: 4px;
     font-size: 16px;
     line-height: 19px;
-    color: #999999;
+    color: var(--text-color-second);
   }
 }
 
@@ -126,7 +126,7 @@
     & > .label {
       font-size: 14px;
       line-height: 16px;
-      color: #333333;
+      color: var(--text-color-primary);
       text-align: center;
       margin-top: 29px;
     }
@@ -146,7 +146,7 @@
       margin-top: 4px;
       font-size: 14px;
       line-height: 16px;
-      color: #333333;
+      color: var(--text-color-primary);
       text-align: center;
     }
   }

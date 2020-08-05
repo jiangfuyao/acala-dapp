@@ -12,7 +12,7 @@
   }
 
   &.error {
-    border-color: #ff5500 !important;
+    border-color: var(--color-error) !important;
   }
 
   .switch {
@@ -40,7 +40,7 @@
 
     font-size: 16px;
     line-height: 19px;
-    color: #333333;
+    color: var(--text-color-primary);
   }
 
   .amountInput {

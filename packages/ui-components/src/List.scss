@@ -12,7 +12,7 @@
 
   font-size: 16px;
   line-height: 19px;
-  color: #999999;
+  color: var(--text-color-second);
 }
 
 .aca-list--style-list {
@@ -21,7 +21,7 @@
   & > .aca-list__item {
     padding: 14.5px 0 13.5px 0;
     line-height: 24px;
-    color: #333333;
+    color: var(--text-color-primary);
     border-bottom: 1px solid #ebeef5;
 
     &:last-child {

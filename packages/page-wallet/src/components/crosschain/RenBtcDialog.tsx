@@ -85,7 +85,7 @@ const BtcAddressContent: FC<Omit<RenBtcDialogProps, 'show'>> = ({
       </Grid>
       <Grid item>
         <p style={{ fontSize: 16, fontWeight: 'bold' }}>For testnet purpose, renBTC is minted from faucet. RenVM will be used upon mainnet launch.</p>
-        <p style={{ color: '#999999', fontSize: 14 }}>Quota: max 1 renBTC / month</p>
+        <p style={{ color: 'var(--text-color-second)', fontSize: 14 }}>Quota: max 1 renBTC / month</p>
       </Grid>
       <Grid item>
         <Button

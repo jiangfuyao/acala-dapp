@@ -1,4 +1,4 @@
-import React, { FC, memo, ReactElement, useContext } from 'react';
+import React, { FC, memo, ReactElement, useContext, useCallback, useState } from 'react';
 
 import { TagGroup, Tag } from '@acala-dapp/ui-components';
 import { TagInput } from '@acala-dapp/ui-components/TagInput';
@@ -11,22 +11,24 @@ const SLIPPAGE_MIN = 0;
 
 export const SlippageInputArea: FC<Props> = memo(() => {
   const { setSlippage, slippage } = useContext(SwapContext);
+  const [custom, setCustom] = useState<number>(0);
   const suggestValues = [0.001, 0.005, 0.01];
   const suggestedIndex = 1;
 
-  const handleClick = (num: number): void => {
+  const handleClick = useCallback((num: number): void => {
     setSlippage(num);
-  };
+  }, [setSlippage]);
 
-  const renderSuggest = (num: number): string => {
+  const renderSuggest = useCallback((num: number): string => {
     return `${num * 100}%${num === suggestValues[suggestedIndex] ? ' (suggested)' : ''}`;
-  };
+  }, [suggestValues]);
 
-  const handleInput = (_value: number | string): void => {
+  const handleInput = useCallback((_value: number | string): void => {
     const value = Number(_value);
 
+    setCustom(value);
     setSlippage(value / 100);
-  };
+  }, [setSlippage]);
 
   return (
     <div className={classes.root}> <p className={classes.title}>Limit addtion price slippage</p>
@@ -52,7 +54,7 @@ export const SlippageInputArea: FC<Props> = memo(() => {
           name='custom'
           onChange={handleInput}
           placeholder='Custom'
-          value={slippage}
+          value={custom}
         />
       </TagGroup>
     </div>

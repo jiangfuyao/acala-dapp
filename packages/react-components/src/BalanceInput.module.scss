@@ -38,7 +38,7 @@
   }
 
   &.error {
-    border-color: #ff5500 !important;
+    border-color: var(--color-error) !important;
   }
 
   &.border {
@@ -60,7 +60,7 @@
   .input {
     height: calc(100% - 2px);
     padding-right: 16px;
-    color: #333333;
+    color: var(--text-color-primary);
   }
 
   .tokenSelector {
@@ -121,7 +121,7 @@
     top: -36px;
     right: 0;
     padding: 4px 8px;
-    background: #ff5500;
+    background: var(--color-error);
     border-radius: 4px;
     font-size: 12px;
     line-height: 16px;
@@ -141,7 +141,7 @@
       right: 18px;
       border-left: 4px solid transparent;
       border-right: 4px solid transparent;
-      border-top: 4px solid #ff5500;
+      border-top: 4px solid var(--color-error);
     }
   }
 }

@@ -5,7 +5,7 @@ html, body {
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #333333;
+  color: var(--text-color-primary);
   font-weight: 400;
 }
 
@@ -29,6 +29,23 @@ p, span {
 :root {
   --color-primary: #173dc9;
   --color-primary-light: #2938ce;
+  --color-primary-hover: #1b4af3;
+  --color-primary-active: #0c30ae;
+
+  --color-blue: #108ee9;
+  --color-green: #8fce65;
+  --color-red: #e02020;
+  --color-yellow: #f0fa41;
+
+  --color-success: var(--color-green);
+  --color-error: var(--color-red);
+  --color-alert: var(--color-yellow);
+  --color-info: var(--color-blue);
+
+  --text-color-white: #ffffff;
+  --text-color-primary: #333333;
+  --text-color-normal: #666666;
+  --text-color-second: #999999;
 
   --screen-small: 960px;
   --screen-middle: 1440px;

@@ -23,6 +23,7 @@
   &.disabled {
     border-color: #e9e9e9 !important;
     cursor: not-allowed;
+
     > svg g {
       stroke: #98a5ae;
     }
@@ -30,7 +31,7 @@
 
 
   > svg g {
-    stroke: #333333;
+    stroke: var(--text-color-primary);
   }
 
   &.left > svg {

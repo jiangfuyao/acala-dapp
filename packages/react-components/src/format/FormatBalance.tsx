@@ -1,4 +1,5 @@
 import React, { FC, ReactNode } from 'react';
+import clsx from 'clsx';
 
 import { Balance as BalanceType } from '@polkadot/types/interfaces';
 import { Fixed18 } from '@acala-network/app-util';
@@ -7,7 +8,8 @@ import { CurrencyId } from '@acala-network/types/interfaces';
 import { BareProps } from '@acala-dapp/ui-components/types';
 
 import { formatBalance, getTokenName } from '../utils';
-import { FormatNumber, FormatNumberProps } from './FormatNumber';
+import { FormatNumber, FormatNumberProps, FormatterColor } from './FormatNumber';
+import classes from './format.module.scss';
 
 export interface BalancePair {
   balance?: BalanceType | Fixed18 | number;
@@ -20,6 +22,7 @@ export interface FormatBalanceProps extends BareProps {
   pair?: BalancePair[];
   pairSymbol?: string;
   decimalLength?: number;
+  color?: FormatterColor;
 }
 
 const formatBalanceConfig: FormatNumberProps['formatNumberConfig'] = {
@@ -31,6 +34,7 @@ const formatBalanceConfig: FormatNumberProps['formatNumberConfig'] = {
 export const FormatBalance: FC<FormatBalanceProps> = ({
   balance,
   className,
+  color,
   currency,
   decimalLength = 6,
   pair,
@@ -54,7 +58,7 @@ export const FormatBalance: FC<FormatBalanceProps> = ({
   };
 
   return (
-    <span className={className}>
+    <span className={clsx(classes.balance, className, color)}>
       {pair ? pair.map((data, index) => renderBalance(data, index)) : renderBalance({ balance, currency }, -1)}
     </span>
   );
