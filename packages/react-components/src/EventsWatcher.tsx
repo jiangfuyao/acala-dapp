@@ -72,9 +72,7 @@ export const EventsWatcher: FC = () => {
       }
     });
 
-    return (): void => {
-      subscriber.unsubscribe();
-    };
+    return (): void => subscriber.unsubscribe();
   }, [api, active]);
 
   return <></>;

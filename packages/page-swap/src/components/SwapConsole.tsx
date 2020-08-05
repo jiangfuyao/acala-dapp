@@ -1,4 +1,4 @@
-import React, { FC, memo, useContext, ReactElement, ReactNode, useState, useCallback, useMemo } from 'react';
+import React, { FC, memo, useContext, ReactElement, ReactNode, useCallback, useMemo } from 'react';
 import { noop } from 'lodash';
 import { useFormik } from 'formik';
 
@@ -6,45 +6,13 @@ import { CurrencyId } from '@acala-network/types/interfaces';
 
 import { Card, nextTick, IconButton, Condition } from '@acala-dapp/ui-components';
 import { BalanceInput, TxButton, numToFixed18Inner, DexExchangeRate, FormatBalance } from '@acala-dapp/react-components';
-import { useFormValidator, useBalance, usePrice } from '@acala-dapp/react-hooks';
+import { useFormValidator, useBalance } from '@acala-dapp/react-hooks';
 import { Fixed18, convertToFixed18 } from '@acala-network/app-util';
-import { CurrencyLike } from '@acala-dapp/react-hooks/types';
 
 import classes from './SwapConsole.module.scss';
 import { SwapInfo } from './SwapInfo';
 import { SlippageInputArea } from './SlippageInputArea';
 import { SwapContext } from './SwapProvider';
-
-interface MarketRateProps {
-  current: CurrencyLike;
-  target: CurrencyLike;
-}
-
-const MarketRate: FC<MarketRateProps> = ({ current, target }) => {
-  const currentPrice = usePrice(current);
-  const targetPrice = usePrice(target);
-  const rate = useMemo(() => {
-    if (!currentPrice || !targetPrice) return Fixed18.ZERO;
-
-    return currentPrice.div(targetPrice);
-  }, [currentPrice, targetPrice]);
-
-  return (
-    <FormatBalance
-      pair={[
-        {
-          balance: Fixed18.fromNatural(1),
-          currency: current
-        },
-        {
-          balance: rate,
-          currency: target
-        }
-      ]}
-      pairSymbol='='
-    />
-  );
-};
 
 interface InputAreaProps {
   addon?: ReactNode;
@@ -138,7 +106,6 @@ export const SwapConsole: FC = memo(() => {
     supplyCurrencies,
     targetCurrencies
   } = useContext(SwapContext);
-  const [slippage, setSlippage] = useState<number>(0.005);
   const supplyCurrencyBalance = useBalance(pool.supplyCurrency);
 
   const validator = useFormValidator({
@@ -169,46 +136,37 @@ export const SwapConsole: FC = memo(() => {
     form.resetForm();
   }, [setCurrency, pool.targetCurrency, pool.supplyCurrency, form]);
 
-  const onSupplyChange = (value: number): void => {
-    calcTarget(pool.supplyCurrency, pool.targetCurrency, value, slippage).subscribe((target) => {
+  const onSupplyChange = useCallback((value: number): void => {
+    calcTarget(pool.supplyCurrency, pool.targetCurrency, value).subscribe((target) => {
       nextTick(() => form.setFieldValue('target', target));
     });
 
     nextTick(() => form.setFieldValue('supply', value));
-  };
+  }, [calcTarget, pool.supplyCurrency, pool.targetCurrency, form]);
 
-  const onTargetChange = (value: number): void => {
-    calcSupply(pool.supplyCurrency, pool.targetCurrency, value, slippage).subscribe((supply) => {
+  const onTargetChange = useCallback((value: number): void => {
+    calcSupply(pool.supplyCurrency, pool.targetCurrency, value).subscribe((supply) => {
       nextTick(() => form.setFieldValue('supply', supply));
-    }).unsubscribe();
+    });
 
     nextTick(() => form.setFieldValue('target', value));
-  };
+  }, [calcSupply, pool.supplyCurrency, pool.targetCurrency, form]);
 
-  const onSlippageChange = (slippage: number): void => {
-    const supply = form.values.supply;
-
-    setSlippage(slippage);
-    calcTarget(pool.supplyCurrency, pool.targetCurrency, supply, slippage).subscribe((target) => {
-      nextTick(() => form.setFieldValue('target', target));
-    }).unsubscribe();
-  };
-
-  const onSupplyTokenChange = (token: CurrencyId): void => {
+  const onSupplyTokenChange = useCallback((token: CurrencyId): void => {
     setCurrency(token, pool.targetCurrency);
 
-    calcSupply(token, pool.targetCurrency, form.values.target, slippage).subscribe((supply) => {
+    calcSupply(token, pool.targetCurrency, form.values.target).subscribe((supply) => {
       if (supply) nextTick(() => form.setFieldValue('supply', supply));
-    }).unsubscribe();
-  };
+    });
+  }, [calcSupply, form, pool.targetCurrency, setCurrency]);
 
-  const onTargetTokenChange = (token: CurrencyId): void => {
+  const onTargetTokenChange = useCallback((token: CurrencyId): void => {
     setCurrency(pool.supplyCurrency, token);
 
-    calcTarget(pool.supplyCurrency, token, form.values.supply, slippage).subscribe((target) => {
+    calcTarget(pool.supplyCurrency, token, form.values.supply).subscribe((target) => {
       if (target) nextTick(() => form.setFieldValue('target', target));
-    }).unsubscribe();
-  };
+    });
+  }, [calcTarget, form, pool.supplyCurrency, setCurrency]);
 
   const isDisabled = useMemo((): boolean => {
     if (form.errors.supply || form.errors.target) {
@@ -253,13 +211,6 @@ export const SwapConsole: FC = memo(() => {
                   target={pool.targetCurrency}
                 />
               </div>
-              <div className={classes.addon}>
-                <p>Market Rate</p>
-                <MarketRate
-                  current={pool.supplyCurrency}
-                  target={pool.targetCurrency}
-                />
-              </div>
             </>
           }
           currencies={targetCurrencies}
@@ -267,7 +218,7 @@ export const SwapConsole: FC = memo(() => {
           inputName='target'
           onChange={onTargetChange}
           onTokenChange={onTargetTokenChange}
-          title='Receive'
+          title='Receive (Estimate)'
           token={pool.targetCurrency}
           value={form.values.target}
         />
@@ -291,16 +242,12 @@ export const SwapConsole: FC = memo(() => {
         </TxButton>
       </div>
       <SwapInfo
-        slippage={slippage}
         supply={form.values.supply}
         supplyCurrency={pool.supplyCurrency}
         target={form.values.target}
         targetCurrency={pool.targetCurrency}
       />
-      <SlippageInputArea
-        onChange={onSlippageChange}
-        slippage={slippage}
-      />
+      <SlippageInputArea />
     </Card>
   );
 });

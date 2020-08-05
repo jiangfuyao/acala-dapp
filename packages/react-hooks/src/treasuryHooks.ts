@@ -22,6 +22,8 @@ export const useTreasuryOverview = (): WithNull<TreasuryOverview> => {
   const _totalCollaterals = useCall<[StorageKey, Balance][]>('query.cdpTreasury.totalCollaterals.entries');
   const [result, setResult] = useState<WithNull<TreasuryOverview>>(null);
 
+  console.log(_surplusPool);
+
   useEffect(() => {
     setResult({
       debitPool: convertToFixed18(_debitPool || 0),

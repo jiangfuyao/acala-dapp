@@ -93,7 +93,7 @@ export const ApiProvider: FC<Props> = ({
 
     api.rpc.system.chain().subscribe((result) => {
       setChain(result.toString());
-    }).unsubscribe();
+    });
   }, [api, connectStatus]);
 
   useEffect(() => {

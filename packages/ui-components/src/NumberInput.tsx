@@ -1,4 +1,4 @@
-import React, { FC, ChangeEventHandler, useState, useEffect, forwardRef, useCallback, useMemo, useRef, FocusEventHandler } from 'react';
+import React, { FC, ChangeEventHandler, useState, useEffect, forwardRef, useCallback, useMemo, useRef, FocusEvent, FocusEventHandler } from 'react';
 import clsx from 'clsx';
 import { noop } from 'lodash';
 import './NumberInput.scss';
@@ -23,6 +23,17 @@ const getValidNumber = (input: string, min?: number, max?: number): [boolean, st
 
   return [false, ''];
 };
+
+// const checkInputComplated = (num: string): boolean => {
+//   // '', x., x.000 are not complated
+//   if (!num) return false;
+
+//   if (num.endsWith('.')) return false;
+
+//   if (/\.0*$/.test(num)) return false;
+
+//   return true;
+// };
 
 export interface NumberInputProps {
   className?: string;
@@ -54,12 +65,15 @@ export const NumberInput: FC<NumberInputProps> = forwardRef<HTMLInputElement, Nu
   const [_value, setValue] = useState<string>('');
   const valueRef = useRef<string>('');
   const isControlled = useMemo<boolean>((): boolean => value !== undefined, [value]);
+  const isInEditMode = useRef<boolean>(false);
 
   const _onChange = useMemo(() => onChange || noop, [onChange]);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback((originEvent) => {
-    const [isValidNumber, validNumber] = getValidNumber(originEvent.currentTarget.value, min, max);
+    const originInput = originEvent.currentTarget.value;
+    const [isValidNumber, validNumber] = getValidNumber(originInput, min, max);
 
+    // no matter if input completed, trigger value change
     // trigger value change event when is a valid number and is changed, otherwise do nothing
     if (isValidNumber && valueRef.current !== validNumber) {
       setValue(validNumber);
@@ -68,7 +82,22 @@ export const NumberInput: FC<NumberInputProps> = forwardRef<HTMLInputElement, Nu
     }
   }, [setValue, _onChange, min, max]);
 
+  const _onBlur = useCallback((e: FocusEvent<HTMLInputElement>) => {
+    if (onBlur) onBlur(e);
+
+    isInEditMode.current = false;
+  }, [onBlur]);
+
+  const _onFocus = useCallback((e: FocusEvent<HTMLInputElement>) => {
+    if (onFocus) onFocus(e);
+
+    isInEditMode.current = true;
+  }, [onFocus]);
+
   useEffect(() => {
+    // if the number input is in edit mode, ignore all props.value change
+    if (isInEditMode.current) return;
+
     if ((value === 0 || value === '0') && isControlled) {
       setValue('');
       valueRef.current = '';
@@ -92,9 +121,9 @@ export const NumberInput: FC<NumberInputProps> = forwardRef<HTMLInputElement, Nu
       id={id}
       inputMode='decimal'
       name={name}
-      onBlur={onBlur}
+      onBlur={_onBlur}
       onChange={handleChange}
-      onFocus={onFocus}
+      onFocus={_onFocus}
       pattern={NUMBER_PATTERN}
       placeholder={placeholder}
       ref={ref as any}

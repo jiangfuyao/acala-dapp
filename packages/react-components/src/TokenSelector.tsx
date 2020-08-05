@@ -2,8 +2,6 @@ import React, { FC, memo, useEffect, useState, ReactNode } from 'react';
 import clsx from 'clsx';
 import { noop } from 'lodash';
 
-import { CurrencyId } from '@acala-network/types/interfaces';
-
 import { BareProps } from '@acala-dapp/ui-components/types';
 import { useApi, useConstants } from '@acala-dapp/react-hooks';
 import { Dropdown, DropdownConfig } from '@acala-dapp/ui-components';
@@ -14,9 +12,11 @@ import { getCurrencyIdFromName, tokenEq } from './utils';
 
 interface Props extends BareProps {
   currencies?: CurrencyLike[];
-  onChange?: (token: CurrencyId) => void;
+  disabledCurrencies?: CurrencyLike[];
   value?: CurrencyLike;
+  onChange?: (token: CurrencyLike) => void;
   showIcon?: boolean;
+  showDetail?: boolean;
 }
 
 export const TokenSelector: FC<Props> = memo(({

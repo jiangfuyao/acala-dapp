@@ -39,6 +39,10 @@ export const StakingConsole: FC = () => {
     return stakingPoolHelper.convertToLiquid(Fixed18.fromNatural(form.values.stakingBalance));
   }, [stakingPoolHelper, form.values.stakingBalance]);
 
+  const handleStakingBalanceChange = useCallback((value: number): void => {
+    form.setFieldValue('stakingBalance', value);
+  }, [form]);
+
   const profit = useMemo<Fixed18>((): Fixed18 => {
     if (!rewardRate || !form.values.stakingBalance) return Fixed18.ZERO;
 
@@ -80,7 +84,7 @@ export const StakingConsole: FC = () => {
           error={form.errors.stakingBalance}
           id='stakingBalance'
           name='stakingBalance'
-          onChange={form.handleChange}
+          onChange={handleStakingBalanceChange}
           onMax={handleMax}
           showMaxBtn
           token={stakingPool.stakingCurrency}

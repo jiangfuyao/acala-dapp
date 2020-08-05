@@ -1,6 +1,6 @@
-import React, { memo, createContext, FC, PropsWithChildren, useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Observable, combineLatest, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import React, { memo, createContext, FC, PropsWithChildren, useState, useEffect, useCallback, useMemo } from 'react';
+import { Observable, combineLatest } from 'rxjs';
+import { map, first } from 'rxjs/operators';
 
 import { Vec } from '@polkadot/types';
 import { CurrencyId } from '@acala-network/types/interfaces';
@@ -30,6 +30,9 @@ interface ContextData {
   setCurrency: (target: CurrencyId, other: CurrencyId, callback?: (pool: PoolData) => void) => void;
   pool: PoolData;
 
+  slippage: number;
+  setSlippage: (value: number) => void;
+
   isInitialized: boolean;
 }
 
@@ -46,7 +49,6 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
   const { api } = useApi();
   const { isInitialized, setEnd } = useInitialize();
   const { dexBaseCurrency } = useConstants();
-  const subscriberRef = useRef<Subscription>();
 
   const supplyCurrencies = useMemo(() => {
     const result = (api.consts.dex.enabledCurrencyIds as Vec<CurrencyId>).toArray();
@@ -62,6 +64,8 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
 
   const feeRate = useMemo(() => api.consts.dex.getExchangeFee, [api]);
 
+  const [slippage, setSlippage] = useState<number>(0.001);
+
   const [pool, setPool] = useState<PoolData>({
     supplyCurrency: '' as any as CurrencyId,
     supplySize: 0,
@@ -70,13 +74,9 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
   });
 
   const setCurrency = useCallback((supply: CurrencyId, target: CurrencyId): void => {
-    if (subscriberRef.current) {
-      subscriberRef.current.unsubscribe();
-    }
-
     // base to other
     if (tokenEq(supply, dexBaseCurrency) && !tokenEq(target, dexBaseCurrency)) {
-      const subscriber = ((api.derive as any).dex.pool(target) as Observable<DerivedDexPool>).subscribe((pool) => {
+      ((api.derive as any).dex.pool(target) as Observable<DerivedDexPool>).pipe(first()).subscribe((pool) => {
         setPool({
           supplyCurrency: supply,
           supplySize: convertToFixed18(pool.base).toNumber(),
@@ -84,13 +84,11 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
           targetSize: convertToFixed18(pool.other).toNumber()
         });
       });
-
-      subscriberRef.current = subscriber;
     }
 
     // other to base
     if (tokenEq(target, dexBaseCurrency) && !tokenEq(supply, dexBaseCurrency)) {
-      const subscriber = ((api.derive as any).dex.pool(supply) as Observable<DerivedDexPool>).subscribe((pool) => {
+      ((api.derive as any).dex.pool(supply) as Observable<DerivedDexPool>).pipe(first()).subscribe((pool) => {
         setPool({
           supplyCurrency: supply,
           supplySize: convertToFixed18(pool.other).toNumber(),
@@ -98,16 +96,14 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
           targetSize: convertToFixed18(pool.base).toNumber()
         });
       });
-
-      subscriberRef.current = subscriber;
     }
 
     // other to other
     if (!tokenEq(target, dexBaseCurrency) && !tokenEq(supply, dexBaseCurrency)) {
-      const subscriber = combineLatest([
+      combineLatest([
         (api.derive as any).dex.pool(supply) as Observable<DerivedDexPool>,
         (api.derive as any).dex.pool(target) as Observable<DerivedDexPool>
-      ]).subscribe(([supplyPool, targetPool]) => {
+      ]).pipe(first()).subscribe(([supplyPool, targetPool]) => {
         setPool({
           supplyCurrency: supply,
           supplySize: convertToFixed18(supplyPool.other).toNumber(),
@@ -115,8 +111,6 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
           targetSize: convertToFixed18(targetPool.other).toNumber()
         });
       });
-
-      subscriberRef.current = subscriber;
     }
 
     if (tokenEq(supply, dexBaseCurrency) && tokenEq(target, dexBaseCurrency)) {
@@ -165,7 +159,8 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
         }
 
         return 0;
-      })
+      }),
+      first()
     );
   }, [api.derive, dexBaseCurrency, feeRate]);
 
@@ -205,7 +200,8 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
         }
 
         return 0;
-      })
+      }),
+      first()
     );
   }, [api.derive, dexBaseCurrency, feeRate]);
 
@@ -227,6 +223,8 @@ export const SwapProvider: FC<PropsWithChildren<{}>> = memo(({ children }) => {
       isInitialized,
       pool,
       setCurrency,
+      setSlippage,
+      slippage,
       supplyCurrencies,
       targetCurrencies
     }}>

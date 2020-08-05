@@ -6,7 +6,7 @@ import classes from './TagInput.module.scss';
 
 interface Props extends NumberInputProps{
   label: string;
-  error: boolean;
+  error?: boolean;
 }
 
 export const TagInput: FC<Props> = ({

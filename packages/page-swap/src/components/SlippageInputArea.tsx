@@ -1,44 +1,21 @@
-import React, { FC, memo, ReactElement } from 'react';
-import { useFormik } from 'formik';
-import { noop } from 'lodash';
+import React, { FC, memo, ReactElement, useContext } from 'react';
 
 import { TagGroup, Tag } from '@acala-dapp/ui-components';
 import { TagInput } from '@acala-dapp/ui-components/TagInput';
-import { useFormValidator } from '@acala-dapp/react-hooks';
 
 import classes from './SlippageInputArea.module.scss';
+import { SwapContext } from './SwapProvider';
 
-interface Props {
-  onChange?: (slippage: number) => void;
-  slippage?: number;
-}
-
-const SLIPPAGE_MAX = 99;
+const SLIPPAGE_MAX = 50;
 const SLIPPAGE_MIN = 0;
 
-export const SlippageInputArea: FC<Props> = memo(({ onChange, slippage = 0.005 }) => {
+export const SlippageInputArea: FC<Props> = memo(() => {
+  const { setSlippage, slippage } = useContext(SwapContext);
   const suggestValues = [0.001, 0.005, 0.01];
   const suggestedIndex = 1;
-  const validator = useFormValidator({
-    custom: {
-      equalMax: true,
-      equalMin: true,
-      max: SLIPPAGE_MAX,
-      min: SLIPPAGE_MIN,
-      type: 'number'
-    }
-  });
-  const form = useFormik({
-    initialValues: {
-      custom: (('' as any) as number)
-    },
-    onSubmit: noop,
-    validate: validator
-  });
 
   const handleClick = (num: number): void => {
-    onChange && onChange(num);
-    form.resetForm();
+    setSlippage(num);
   };
 
   const renderSuggest = (num: number): string => {
@@ -48,23 +25,7 @@ export const SlippageInputArea: FC<Props> = memo(({ onChange, slippage = 0.005 }
   const handleInput = (_value: number | string): void => {
     const value = Number(_value);
 
-    if (value < SLIPPAGE_MIN) {
-      onChange && onChange(SLIPPAGE_MIN / 100);
-      form.setFieldValue('custom', SLIPPAGE_MIN);
-
-      return;
-    }
-
-    if (value > SLIPPAGE_MAX) {
-      onChange && onChange(SLIPPAGE_MAX / 100);
-      form.setFieldValue('custom', SLIPPAGE_MAX);
-
-      return;
-    }
-
-    onChange && onChange(value / 100);
-
-    form.setFieldValue('custom', value);
+    setSlippage(value / 100);
   };
 
   return (
@@ -84,7 +45,6 @@ export const SlippageInputArea: FC<Props> = memo(({ onChange, slippage = 0.005 }
           })
         }
         <TagInput
-          error={!!form.errors.custom}
           id='custom'
           label='%'
           max={SLIPPAGE_MAX}
@@ -92,7 +52,7 @@ export const SlippageInputArea: FC<Props> = memo(({ onChange, slippage = 0.005 }
           name='custom'
           onChange={handleInput}
           placeholder='Custom'
-          value={form.values.custom}
+          value={slippage}
         />
       </TagGroup>
     </div>
