@@ -1,12 +1,11 @@
 import React, { FC, memo, useMemo, useContext, useEffect } from 'react';
-import clsx from 'clsx';
 
 import { Fixed18, convertToFixed18 } from '@acala-network/app-util';
 import { CurrencyId } from '@acala-network/types/interfaces';
 
-import { Tag, ArrowRightOutlined } from '@acala-dapp/ui-components';
-import { FormatBalance, FormatRatio, tokenEq, Token } from '@acala-dapp/react-components';
-import { usePrice, useDexExchangeRate, useConstants, useApi, useDexPool } from '@acala-dapp/react-hooks';
+import { Tag } from '@acala-dapp/ui-components';
+import { FormatBalance, FormatRatio, tokenEq } from '@acala-dapp/react-components';
+import { usePrice, useDexExchangeRate, useConstants, useApi } from '@acala-dapp/react-hooks';
 import { CurrencyLike } from '@acala-dapp/react-hooks/types';
 
 import classes from './SwapConsole.module.scss';
@@ -78,32 +77,33 @@ const PriceImpact: FC<PriceImpactPorps> = ({ pool, supply, target }) => {
   );
 };
 
-interface SwapRouteProps {
-  pool: PoolData;
-}
+// TODO: it don't necessary for our dex
+// interface SwapRouteProps {
+//   pool: PoolData;
+// }
 
-const SwapRoute: FC<SwapRouteProps> = ({ pool }) => {
-  const { dexBaseCurrency } = useConstants();
-  const isCrossBase = useMemo(() => {
-    return !tokenEq(pool.supplyCurrency, dexBaseCurrency) && !tokenEq(pool.targetCurrency, dexBaseCurrency);
-  }, [pool, dexBaseCurrency]);
+// const SwapRoute: FC<SwapRouteProps> = ({ pool }) => {
+//   const { dexBaseCurrency } = useConstants();
+//   const isCrossBase = useMemo(() => {
+//     return !tokenEq(pool.supplyCurrency, dexBaseCurrency) && !tokenEq(pool.targetCurrency, dexBaseCurrency);
+//   }, [pool, dexBaseCurrency]);
 
-  if (!isCrossBase) return null;
+//   if (!isCrossBase) return null;
 
-  return (
-    <div className={clsx(classes.info, classes.swapRoute)}>
-      Swap Route is
-      <Token currency={pool.supplyCurrency}
-        icon/>
-      <ArrowRightOutlined />
-      <Token currency={dexBaseCurrency}
-        icon/>
-      <ArrowRightOutlined />
-      <Token currency={pool.targetCurrency}
-        icon/>
-    </div>
-  );
-};
+//   return (
+//     <div className={clsx(classes.info, classes.swapRoute)}>
+//       Swap Route is
+//       <Token currency={pool.supplyCurrency}
+//         icon/>
+//       <ArrowRightOutlined />
+//       <Token currency={dexBaseCurrency}
+//         icon/>
+//       <ArrowRightOutlined />
+//       <Token currency={pool.targetCurrency}
+//         icon/>
+//     </div>
+//   );
+// };
 
 interface SwapFeeProps {
   pool: PoolData;
@@ -172,7 +172,6 @@ export const SwapInfo: FC<Props> = memo(({
         />
       </p>
       <SwapFee pool={pool} />
-      <SwapRoute pool={pool} />
       <PriceImpact
         pool={pool}
         supply={supply}

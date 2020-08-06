@@ -5,7 +5,7 @@ html, body {
   'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--text-color-primary);
+  color: #333333;
   font-weight: 400;
 }
 

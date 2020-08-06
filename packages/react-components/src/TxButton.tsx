@@ -170,7 +170,7 @@ export const TxButton: FC<PropsWithChildren<Props>> = ({
           notification.error({
             duration: 4,
             key: notificationKey,
-            message: `Unknown Error Occurred! ${error.message}`
+            message: (error && error.message) ? error.message : 'Unknown Error Occurred!'
           });
         }
 
@@ -183,7 +183,7 @@ export const TxButton: FC<PropsWithChildren<Props>> = ({
           notification.success({
             duration: 4,
             key: notificationKey,
-            message: 'success'
+            message: 'Submit Transaction Success'
           });
           _onSuccess();
           setIsSending(false);

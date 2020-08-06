@@ -52,6 +52,8 @@ const _Tabs: FC<TabsProps> = ({
     if (!children) return [];
 
     const result = Children.map(children, (child): PanelAttr | undefined => {
+      if (!child) return;
+
       if (has(child, 'key')) {
         return {
           disabled: (child as ReactElement<PanelProps>).props.disabled,
@@ -60,7 +62,7 @@ const _Tabs: FC<TabsProps> = ({
         };
       }
 
-      console.warn('Tabs children need an unique key');
+      // console.warn('Tabs children need an unique key');
 
       return undefined;
     });

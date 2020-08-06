@@ -5,6 +5,10 @@
 .number, .balance {
   white-space: nowrap;
 
+  .decimal {
+    // font-size: 70%;
+  }
+
   &:global(.primary) {
     color: var(--color-primary);
   }

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import clsx from 'clsx';
 import { Fixed18 } from '@acala-network/app-util';
 
@@ -31,6 +31,10 @@ export const FormatNumber: FC<FormatNumberProps> = ({
   toolTipsProps,
   withTooltips = false
 }) => {
+  const [i, d] = useMemo(() => {
+    return formatNumber(data, formatNumberConfig).split('.');
+  }, [data, formatNumberConfig]);
+
   return (
     <Tooltip
       show={withTooltips}
@@ -38,9 +42,10 @@ export const FormatNumber: FC<FormatNumberProps> = ({
       {...toolTipsProps}
     >
       <span className={clsx(classes.number, className, color)}>
-        {
-          `${prefix}${formatNumber(data, formatNumberConfig)}${suffix}`
-        }
+        { prefix ? <span>{prefix}</span> : null }
+        { i ? <span>{i}</span> : null }
+        { d ? <span className={classes.decimal}>.{d}</span> : null }
+        { suffix ? <span>{suffix}</span> : null }
       </span>
     </Tooltip>
   );

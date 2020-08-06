@@ -1,19 +1,20 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, ReactElement } from 'react';
 import clsx from 'clsx';
 
-import { MessageType } from './types';
+import { MessageType, BareProps } from './types';
 import { ReactComponent as AlertIcon } from './assets/alert.svg';
 import './Alert.scss';
 
-interface AlertProps {
+interface AlertProps extends BareProps {
   message: ReactNode;
-  type: MessageType;
+  type?: MessageType;
+  icon?: ReactNode;
 }
 
-export const Alert: FC<AlertProps> = ({ message, type }) => {
+export const Alert: FC<AlertProps> = ({ className, icon, message, type }) => {
   return (
-    <div className={clsx('aca-alert', type)}>
-      <AlertIcon className='aca-alert__icon' />
+    <div className={clsx('aca-alert', type, className)}>
+      { icon ? icon : <AlertIcon className='aca-alert__icon' /> }
       <span className='aca-alert__message'>{message}</span>
     </div>
   );

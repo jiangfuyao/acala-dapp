@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash';
 import { useLockPrices, LockedPricesResult } from '@acala-dapp/react-hooks/useLockPrices';
 import { useEmergencyShutdown } from '@acala-dapp/react-hooks';
 
-export type EmergencyShutdownStep = 'lock_price' | 'process_debit' | 'waiting_for_refund' | 'refund';
+export type EmergencyShutdownStep = 'trigger' | 'process' | 'reclaim' | 'success';
 
 export interface EmergencyShutdownContextData {
   step: EmergencyShutdownStep;
@@ -16,15 +16,17 @@ export const EmergencyShutdownProvider: FC<PropsWithChildren<unknown>> = ({ chil
   const lockedPrices = useLockPrices();
   const { canRefund } = useEmergencyShutdown();
   const step = useMemo<EmergencyShutdownStep>(() => {
+    return 'trigger';
+
     if (isEmpty(lockedPrices)) {
-      return 'lock_price';
+      return 'trigger';
     }
 
     if (canRefund) {
-      return 'refund';
+      return 'process';
     }
 
-    return 'waiting_for_refund';
+    return 'reclaim';
   }, [canRefund, lockedPrices]);
 
   return (

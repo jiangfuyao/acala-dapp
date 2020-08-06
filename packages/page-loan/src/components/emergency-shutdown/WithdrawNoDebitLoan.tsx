@@ -6,9 +6,8 @@ import { CurrencyId } from '@acala-network/types/interfaces';
 import { Token, FormatBalance, getTokenName, TxButton } from '@acala-dapp/react-components';
 import { convertToFixed18 } from '@acala-network/app-util';
 
-import { ReactComponent as GuideBG } from '../assets/guide-bg.svg';
-import { LoanContext } from './LoanProvider';
-import classes from './Overview.module.scss';
+import { ReactComponent as GuideBG } from '../../assets/guide-bg.svg';
+import { LoanContext } from '../LoanProvider';
 
 export const Guide: FC = () => {
   const { setCurrentTab } = useContext(LoanContext);
@@ -53,19 +52,10 @@ export const Guide: FC = () => {
   );
 };
 
-const DebitAmount: FC<{ token: CurrencyId | string }> = ({ token }) => {
-  const currentUserLoanHelper = useLoanHelper(token);
-
-  return (
-    <FormatBalance balance={currentUserLoanHelper?.debitAmount} />
-  );
-};
-
 export const WithdrawNoDebitLoan: FC = () => {
-  const [empty, setEmpty] = useState<boolean | null>(null);
+  const [empty, setEmpty] = useState<boolean>(true);
 
   const loans = useAllUserLoans();
-  const { stableCurrency } = useConstants();
 
   const tableConfig: TableConfig[] = [
     {
@@ -79,7 +69,7 @@ export const WithdrawNoDebitLoan: FC = () => {
       width: 1
     },
     {
-      align: 'left',
+      align: 'right',
       /* eslint-disable-next-line react/display-name */
       render: (data: DerivedUserLoan): ReactNode => (
         <FormatBalance
@@ -88,50 +78,43 @@ export const WithdrawNoDebitLoan: FC = () => {
         />
       ),
       title: 'Collateral',
-      width: 2
-    },
-    {
-      align: 'left',
-      /* eslint-disable-next-line react/display-name */
-      render: (data: DerivedUserLoan): ReactNode => {
-        return <DebitAmount token={data.token} />;
-      },
-      title: `Debit ${getTokenName(stableCurrency)}`,
-      width: 2
+      width: 4
     },
     {
       align: 'right',
       /* eslint-disable-next-line react/display-name */
       render: (data: DerivedUserLoan): ReactNode => {
-        const params = [data.token, data.collaterals];
+        const params = [data.token, '-' + data.collaterals, '0'];
 
         return (
           <TxButton
-            method='adjustCollateralAfterShutdown'
+            method='adjustLoan'
             params={params}
             section='honzon'
             size='small'
-          >Widthdraw Collateral</TxButton>
+          >
+            Widthdraw
+          </TxButton>
         );
       },
       title: '',
-      width: 2
+      width: 1
     }
   ];
 
   useEffect(() => {
-    if (loans !== null) {
-      setEmpty(!filterEmptyLoan(loans).length);
-    }
+    if (!loans) return;
+
+    setEmpty(!filterEmptyLoan(loans).length);
   }, [loans]);
 
   // wait loading data
-  if (empty === null) {
+  if (empty) {
     return null;
   }
 
   return (
-    <Card header='Withdraw No Debit Loan'
+    <Card header='Free Collteral'
       padding={false}
     >
       <Table

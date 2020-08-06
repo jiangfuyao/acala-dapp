@@ -191,7 +191,7 @@ export const SwapConsole: FC = memo(() => {
       pool.supplyCurrency,
       numToFixed18Inner(form.values.supply),
       pool.targetCurrency,
-      Fixed18.fromNatural(form.values.target).mul(Fixed18.fromNatural(1 + slippage)).innerToString()
+      Fixed18.fromNatural(form.values.target).div(Fixed18.fromNatural(1 + slippage)).innerToString()
     ];
   }, [form, pool, slippage]);
 

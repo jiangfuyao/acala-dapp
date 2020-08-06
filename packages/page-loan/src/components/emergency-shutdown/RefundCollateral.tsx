@@ -9,7 +9,7 @@ import { useFormValidator, useConstants, useRefundCollateral, RefundCollaterals,
 import { BalanceInput, TxButton, numToFixed18Inner, UserBalance, FormatBalance, BalancePair } from '@acala-dapp/react-components';
 
 import classes from './RefundCollateral.module.scss';
-import { ReactComponent as AddIcon } from '../assets/add.svg';
+import { ReactComponent as AddIcon } from '../../assets/add.svg';
 
 interface InputAreaProps {
   disabled?: boolean;

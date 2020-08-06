@@ -8,7 +8,7 @@ import { LoanProvider, LoanContext } from './components/LoanProvider';
 import { LoanConsole } from './components/LoanConsole';
 import { Overview } from './components/Overview';
 import { Transaction } from './components/Transaction';
-import { EmergencyShutdown } from './components/EmergencyShutdown';
+import { EmergencyShutdown } from './components/emergency-shutdown';
 import { WalletBalance } from '@acala-dapp/react-components';
 import { LoanAlert } from './components/LoanAlert';
 
@@ -23,12 +23,13 @@ const Inner: FC = () => {
           <LoanAlert />
           <Grid item>
             <Tabs
+              defaultKey={isShutdown ? 'shutdown' : 'loans'}
               type='button'
             >
               {
                 isShutdown ? (
                   <Tabs.Panel
-                    key='emergency'
+                    key='shutdown'
                     tab='Emergency Shutdown'
                   >
                     <EmergencyShutdown />
