@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Fixed18, convertToFixed18 } from '@acala-network/app-util';
 import { Balance, CollateralAuctionItem, DebitAuctionItem, SurplusAuctionItem } from '@acala-network/types/interfaces';
 import { StorageKey, Option } from '@polkadot/types';
+import { sortBy } from 'lodash';
 
 import { useCall } from './useCall';
 import { CurrencyLike, WithNull } from './types';
@@ -53,17 +54,19 @@ export const useCollateralAuctions = (): CollateralAuction[] => {
 
   useEffect(() => {
     if (!collateralAuction) return;
-
-    setResult(collateralAuction.map((item) => {
+    const newResult = collateralAuction.map((item) => {
       return {
         amount: convertToFixed18(item[1].unwrap().amount || 0),
         currency: item[1].unwrap().currencyId?.toString(),
         id: (item[0].toHuman() as string[])[0],
-        owner: (item[1].unwrap() as any).owner.toString(),
+        owner: (item[1].unwrap() as any).refundRecipient.toString(),
         startTime: item[1].unwrap().startTime.toNumber(),
         target: convertToFixed18(item[1].unwrap().target || 0)
       };
-    }));
+    });
+    const sorted = sortBy(newResult, 'id');
+
+    setResult(sorted);
   }, [collateralAuction]);
 
   return result;

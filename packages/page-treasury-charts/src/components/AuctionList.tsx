@@ -1,9 +1,62 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { Table } from 'antd';
 
+import { Option } from '@polkadot/types';
+import { AuctionInfo } from '@open-web3/orml-types/interfaces';
 import { Card, Tabs } from '@acala-dapp/ui-components';
-import { useCollateralAuctions, useConstants, useDebitAuctions, useSurplusAuction, CollateralAuction, DebitAuction, SurplusAuction } from '@acala-dapp/react-hooks';
-import { Token, FormatAddress, FormatBalance } from '@acala-dapp/react-components';
+import { useCall, useCollateralAuctions, useConstants, useDebitAuctions, useSurplusAuction, CollateralAuction, DebitAuction, SurplusAuction } from '@acala-dapp/react-hooks';
+import { Token, FormatAddress, FormatBalance, BalanceInput, TxButton, numToFixed18Inner } from '@acala-dapp/react-components';
+
+const AuctionLastBid: FC<{ id: string }> = ({ id }) => {
+  const info = useCall<Option<AuctionInfo>>('query.auction.auctions', [id]);
+
+  if (info) {
+    console.log('!!', info.toHuman());
+  }
+
+  const bid = info?.unwrapOr(null)?.bid?.unwrapOr(null);
+
+  if (!bid) {
+    return <span>-</span>;
+  }
+
+  return (
+    <div>
+      <FormatAddress
+        address={bid[0].toString()}
+        withCopy
+      />
+      <FormatBalance
+        balance={bid[1]}
+        currency='aUSD'
+      />
+    </div>
+  );
+};
+
+const AuctionMakeBid: FC<{ id: string }> = ({ id }) => {
+  const [val, setVal] = useState(0);
+
+  return (
+    <div style={{ minWidth: 200 }}>
+      <BalanceInput
+        onChange={setVal}
+        showIcon={false}
+        size='small'
+        token='AUSD'
+        value={val}
+      />
+      <TxButton
+        disabled={val === 0}
+        method='bid'
+        params={[id, numToFixed18Inner(val)]}
+        section='auction'
+      >
+        Bid
+      </TxButton>
+    </div>
+  );
+};
 
 export const CollateralAuctionList: FC<{ data: CollateralAuction[]}> = ({ data }) => {
   const { stableCurrency } = useConstants();
@@ -58,6 +111,18 @@ export const CollateralAuctionList: FC<{ data: CollateralAuction[]}> = ({ data }
         key: 'start_time',
         render: (item: any): string => `#${item.startTime}`,
         title: 'Start Block'
+      },
+      {
+        key: 'bidder',
+        /* eslint-disable-next-line react/display-name */
+        render: (item: any): JSX.Element => <AuctionLastBid id={item.id} />,
+        title: 'Last Bid'
+      },
+      {
+        key: 'bid',
+        /* eslint-disable-next-line react/display-name */
+        render: (item: any): JSX.Element => <AuctionMakeBid id={item.id} />,
+        title: 'Bid'
       }
     ];
   }, [stableCurrency]);
