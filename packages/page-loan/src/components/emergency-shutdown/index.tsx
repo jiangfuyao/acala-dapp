@@ -3,28 +3,12 @@ import { Card, Grid, Condition } from '@acala-dapp/ui-components';
 import { Steps } from 'antd';
 
 import { LockPrices } from './LockPrices';
-import { EmergencyPrepeper } from './EmergencyPrepper';
-import { EmergencyShutdownProvider, EmergencyShutdownContext } from './EmergencyShutdownProvider';
+import { EmergencyShutdownProvider, EmergencyShutdownContext, StepRoute } from './EmergencyShutdownProvider';
 import { WithdrawNoDebitLoan } from './WithdrawNoDebitLoan';
 import { RefundCollateral } from './RefundCollateral';
 import { Tips } from './Tips';
-
-// import classes from './EmergencyShutdown.module.scss';
-
-const stepConfig = [
-  {
-    index: 'trigger',
-    text: 'Shutdown Triggered'
-  },
-  {
-    index: 'process',
-    text: 'Liquidation'
-  },
-  {
-    index: 'reclaim',
-    text: 'Reclaim'
-  }
-];
+import { Controller } from './Controller';
+import { Process } from './Process';
 
 export const Inner = (): JSX.Element => {
   const { step } = useContext(EmergencyShutdownContext);
@@ -32,7 +16,7 @@ export const Inner = (): JSX.Element => {
   return (
     <Card>
       <Steps
-        current={0}
+        current={StepRoute.findIndex((c) => step === c)}
         size='small'
       >
         <Steps.Step title='Shutdown Triggered' />
@@ -50,6 +34,21 @@ export const Inner = (): JSX.Element => {
           </Grid>
         </Grid>
       </Condition>
+      <Condition condition={step === 'process'}>
+        <Grid container>
+          <Grid item>
+            <Process />
+          </Grid>
+        </Grid>
+      </Condition>
+      <Condition condition={step === 'reclaim'}>
+        <Grid container>
+          <Grid item>
+            <RefundCollateral />
+          </Grid>
+        </Grid>
+      </Condition>
+      <Controller />
     </Card>
   );
 };

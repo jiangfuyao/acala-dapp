@@ -35,7 +35,7 @@ export const useDexExchangeRate = (supply: CurrencyId, target?: CurrencyId, supp
       return _base.sub(_targetAmount).div(_other.add(_supplyAmount));
     }
 
-    // other -> other, use supplyPool data & targetPool data, supply === supplyPool.other, target === targetPool.other 
+    // other -> other, use supplyPool data & targetPool data, supply === supplyPool.other, target === targetPool.other
     if (!tokenEq(_target, dexBaseCurrency) && !tokenEq(supply, dexBaseCurrency) && supplyPool && targetPool) {
       const _supplyOther = convertToFixed18(supplyPool.other);
       const _supplyBase = convertToFixed18(supplyPool.base);

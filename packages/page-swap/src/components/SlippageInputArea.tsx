@@ -9,7 +9,7 @@ import { SwapContext } from './SwapProvider';
 const SLIPPAGE_MAX = 50;
 const SLIPPAGE_MIN = 0;
 
-export const SlippageInputArea: FC<Props> = memo(() => {
+export const SlippageInputArea: FC = memo(() => {
   const { setSlippage, slippage } = useContext(SwapContext);
   const [custom, setCustom] = useState<number>(0);
   const suggestValues = [0.001, 0.005, 0.01];

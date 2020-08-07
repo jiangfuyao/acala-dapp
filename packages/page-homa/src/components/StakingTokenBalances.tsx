@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
-import { CurrencyId } from '@acala-network/types/interfaces';
 
 import { useConstants } from '@acala-dapp/react-hooks';
 import { Card, List } from '@acala-dapp/ui-components';
 import { UserBalance, getTokenName } from '@acala-dapp/react-components';
+import { CurrencyLike } from '@acala-dapp/react-hooks/types';
 
 interface TableData {
-  token: CurrencyId;
+  token: CurrencyLike;
 }
 
 export const StakingTokeBalances: FC = () => {

@@ -13,6 +13,10 @@
 .aca-page__container {
   margin: 0 auto;
   max-width: 1120px;
+
+  &.fullscreen {
+    max-width: 100%;
+  }
 }
 
 .aca-page__title, .aca-page__sub-title {

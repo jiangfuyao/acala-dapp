@@ -1,16 +1,17 @@
 import React, { FC, memo } from 'react';
 
 import AccountId from '@polkadot/types/generic/AccountId';
-import { CurrencyId, Balance } from '@acala-network/types/interfaces';
+import { Balance } from '@acala-network/types/interfaces';
 import { convertToFixed18 } from '@acala-network/app-util';
 
 import { useCall, useAccounts, usePrice } from '@acala-dapp/react-hooks';
 import { BareProps } from '@acala-dapp/ui-components/types';
+import { CurrencyLike } from '@acala-dapp/react-hooks/types';
 import { FormatValue, FormatBalance } from './format';
 
 interface Props extends BareProps {
   account?: AccountId | string;
-  token: CurrencyId | string;
+  token: CurrencyLike;
   showValue?: boolean;
   withIcon?: boolean;
 }

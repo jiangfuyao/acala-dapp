@@ -2,7 +2,6 @@ import React, { FC, useMemo, useCallback } from 'react';
 import { noop } from 'lodash';
 import { useFormik } from 'formik';
 
-import { CurrencyId } from '@acala-network/types/interfaces';
 import { stableCoinToDebit, Fixed18, convertToFixed18, calcLiquidationPrice, calcCollateralRatio } from '@acala-network/app-util';
 
 import { Dialog, ButtonProps, Button, List } from '@acala-dapp/ui-components';
@@ -10,13 +9,14 @@ import { useModal, useFormValidator, useConstants, useBalance, useLoanHelper } f
 import { BalanceInput, TxButton, FormatBalance, FormatRatio, FormatPrice } from '@acala-dapp/react-components';
 
 import classes from './LoanActionButton.module.scss';
+import { CurrencyLike } from '@acala-dapp/react-hooks/types';
 
 type ActionType = 'payback' | 'generate' | 'deposit' | 'withdraw';
 
 interface Props extends Omit<ButtonProps, 'onClick' | 'type'> {
   type: ActionType;
   text: string;
-  token: CurrencyId | string;
+  token: CurrencyLike;
 }
 
 export const LonaActionButton: FC<Props> = ({

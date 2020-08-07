@@ -8,6 +8,8 @@ import { Fixed18 } from '@acala-network/app-util';
 import { Card, nextTick } from '@acala-dapp/ui-components';
 import { useDexExchangeRate, useFormValidator, useBalance } from '@acala-dapp/react-hooks';
 import { BalanceInput, TxButton, numToFixed18Inner, DexExchangeRate, DexPoolSize, DexUserShare, UserBalance } from '@acala-dapp/react-components';
+import { CurrencyLike } from '@acala-dapp/react-hooks/types';
+import { CurrencyChangeFN } from '@acala-dapp/react-components/types';
 
 import classes from './DepositConsole.module.scss';
 import { ReactComponent as AddIcon } from '../assets/add.svg';
@@ -18,11 +20,11 @@ interface InputAreaProps {
   error: any;
   id: string;
   name: string;
-  currencies?: (CurrencyId | string)[];
+  currencies?: CurrencyLike[];
   value: number;
   onChange: (value: number | string) => void;
-  token: CurrencyId;
-  onTokenChange?: (token: CurrencyId) => void;
+  token: CurrencyLike;
+  onTokenChange?: CurrencyChangeFN;
   maxValue?: number;
   showMax?: boolean;
 }

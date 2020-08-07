@@ -1,7 +1,6 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import { useLockPrices } from '@acala-dapp/react-hooks/useLockPrices';
-import { Table, TableConfig } from '@acala-dapp/ui-components';
-import { Token, FormatPrice, TokenImage, TokenName, TokenFullName } from '@acala-dapp/react-components';
+import { FormatPrice, TokenImage, TokenName, TokenFullName } from '@acala-dapp/react-components';
 import { Fixed18 } from '@acala-network/app-util';
 import { BareProps } from '@acala-dapp/ui-components/types';
 import { CurrencyLike } from '@acala-dapp/react-hooks/types';
@@ -24,9 +23,15 @@ const PriceCard: FC<PriceCardProps> = ({ currency, price }) => {
         currency={currency}
       />
       <div className={classes.content}>
-        <div className={classes.price}>
-          <TokenName currency={currency} />
-          <FormatPrice data={price} />
+        <div className={classes.priceContent}>
+          <TokenName
+            className={classes.assetName}
+            currency={currency}
+          />
+          <FormatPrice
+            className={classes.price}
+            data={price}
+          />
         </div>
         <TokenFullName
           className={classes.fullName}
@@ -37,7 +42,7 @@ const PriceCard: FC<PriceCardProps> = ({ currency, price }) => {
   );
 };
 
-export const LockPrices: FC<BareProps> = ({ className }) => {
+export const LockPrices: FC<BareProps> = () => {
   const prices = useLockPrices();
 
   return (

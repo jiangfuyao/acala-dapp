@@ -7,6 +7,8 @@ import { Fixed18, convertToFixed18 } from '@acala-network/app-util';
 
 import { useFormValidator, useConstants, useRefundCollateral, RefundCollaterals, useBalance } from '@acala-dapp/react-hooks';
 import { BalanceInput, TxButton, numToFixed18Inner, UserBalance, FormatBalance, BalancePair } from '@acala-dapp/react-components';
+import { CurrencyLike } from '@acala-dapp/react-hooks/types';
+import { CurrencyChangeFN } from '@acala-dapp/react-components/types';
 
 import classes from './RefundCollateral.module.scss';
 import { ReactComponent as AddIcon } from '../../assets/add.svg';
@@ -20,8 +22,8 @@ interface InputAreaProps {
   currencies?: (CurrencyId | string)[];
   value: number;
   onChange: (value: number) => void;
-  token: CurrencyId;
-  onTokenChange?: (token: CurrencyId) => void;
+  token: CurrencyLike;
+  onTokenChange?: CurrencyChangeFN;
 }
 
 const InputArea: FC<InputAreaProps> = ({

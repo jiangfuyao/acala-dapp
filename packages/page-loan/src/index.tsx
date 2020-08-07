@@ -27,14 +27,13 @@ const Inner: FC = () => {
               type='button'
             >
               {
-                isShutdown ? (
-                  <Tabs.Panel
-                    key='shutdown'
-                    tab='Emergency Shutdown'
-                  >
-                    <EmergencyShutdown />
-                  </Tabs.Panel>
-                ) : null
+                <Tabs.Panel
+                  disabled={!isShutdown}
+                  key='shutdown'
+                  tab='Emergency Shutdown'
+                >
+                  <EmergencyShutdown />
+                </Tabs.Panel>
               }
               <Tabs.Panel
                 disabled={isShutdown}

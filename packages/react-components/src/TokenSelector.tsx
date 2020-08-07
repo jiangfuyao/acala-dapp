@@ -9,12 +9,13 @@ import { CurrencyLike } from '@acala-dapp/react-hooks/types';
 
 import { Token } from './Token';
 import { getCurrencyIdFromName, tokenEq } from './utils';
+import { CurrencyChangeFN } from './types';
 
 interface Props extends BareProps {
   currencies?: CurrencyLike[];
   disabledCurrencies?: CurrencyLike[];
   value?: CurrencyLike;
-  onChange?: (token: CurrencyLike) => void;
+  onChange?: CurrencyChangeFN;
   showIcon?: boolean;
   showDetail?: boolean;
 }

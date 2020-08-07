@@ -8,6 +8,8 @@ import { Card, nextTick, IconButton, Condition } from '@acala-dapp/ui-components
 import { BalanceInput, TxButton, numToFixed18Inner, DexExchangeRate, FormatBalance } from '@acala-dapp/react-components';
 import { useFormValidator, useBalance } from '@acala-dapp/react-hooks';
 import { Fixed18, convertToFixed18 } from '@acala-network/app-util';
+import { CurrencyLike } from '@acala-dapp/react-hooks/types';
+import { CurrencyChangeFN } from '@acala-dapp/react-components/types';
 
 import classes from './SwapConsole.module.scss';
 import { SwapInfo } from './SwapInfo';
@@ -19,8 +21,8 @@ interface InputAreaProps {
   error: any;
   title: string;
   currencies: (CurrencyId | string)[];
-  token: CurrencyId | string;
-  onTokenChange: (token: CurrencyId) => void;
+  token: CurrencyLike;
+  onTokenChange: CurrencyChangeFN;
   value: number;
   onChange: (value: number) => void;
   inputName: string;

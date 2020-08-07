@@ -8,9 +8,9 @@ import { AuctionList } from './components/AuctionList';
 
 const PageWallet: FC = () => {
   return (
-    <Page>
+    <Page fullscreen>
       <Page.Title title='Treasury' />
-      <Page.Content fullscreen>
+      <Page.Content>
         <Grid container>
           <Grid
             item

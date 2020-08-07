@@ -12,6 +12,7 @@ import { useApi } from './useApi';
 import { useAccounts } from './useAccounts';
 import { useConstants } from './useConstants';
 import { useAllPrices } from './priceHooks';
+import { CurrencyLike } from './types';
 
 const calcAccumulateResult = (rewards: Fixed18[], callback: (result: Fixed18) => void): void => {
   const total = rewards.reduce((acc, cur) => {
@@ -23,7 +24,7 @@ const calcAccumulateResult = (rewards: Fixed18[], callback: (result: Fixed18) =>
 
 interface HooksReturnType {
   amount: Fixed18;
-  token: CurrencyId;
+  token: CurrencyLike;
 }
 
 export const useDexTotalReward = (): HooksReturnType => {
@@ -112,7 +113,7 @@ export const useDexTotalSystemReward = (): HooksReturnType => {
 
 interface HooksReturnType {
   amount: Fixed18;
-  token: CurrencyId;
+  token: CurrencyLike;
 }
 
 export const useDexTotalDeposit = (): HooksReturnType => {

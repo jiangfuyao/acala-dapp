@@ -6,11 +6,13 @@ import { CurrencyId } from '@acala-network/types/interfaces';
 import { useApi } from '@acala-dapp/react-hooks';
 import { BareProps } from '@acala-dapp/ui-components/types';
 import { Button, Condition, NumberInput, NumberInputProps } from '@acala-dapp/ui-components';
+import { CurrencyLike } from '@acala-dapp/react-hooks/types';
 
 import { TokenName, TokenImage } from './Token';
 import { TokenSelector } from './TokenSelector';
 import { getCurrencyIdFromName } from './utils';
 import classes from './BalanceInput.module.scss';
+import { CurrencyChangeFN } from './types';
 
 type BalanceInputSize = 'large' | 'middle' | 'small';
 
@@ -20,11 +22,11 @@ export interface BalanceInputProps extends BareProps {
   error?: string | string[] | FormikErrors<any> | FormikErrors<any>[];
   disabled?: boolean;
   onChange?: (value: number) => void;
-  onTokenChange?: (token: CurrencyId) => void;
+  onTokenChange?: CurrencyChangeFN;
   onFocus?: FocusEventHandler<HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   placeholder?: string;
-  token: CurrencyId | string;
+  token: CurrencyLike | string;
   tokenPosition?: 'left' | 'right';
   value?: number;
   showMaxBtn?: boolean;

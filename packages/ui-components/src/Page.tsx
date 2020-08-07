@@ -24,10 +24,10 @@ const Title: FC<TitleProps> = ({ title }) => {
  * @name Page
  * @description page
  */
-const _Page: FC<BareProps> = ({ children }) => {
+const _Page: FC<BareProps & { fullscreen?: boolean }> = ({ children, fullscreen }) => {
   return (
     <div className={'aca-page'}>
-      <div className={'aca-page__container'}>
+      <div className={clsx('aca-page__container', { fullscreen: fullscreen })}>
         {children}
       </div>
     </div>
@@ -46,7 +46,7 @@ const Content: FC<BareProps & { fullscreen?: boolean }> = ({ children, fullscree
   );
 };
 
-interface PageType extends FC<BareProps> {
+interface PageType extends FC<BareProps & { fullscreen?: boolean }> {
   Title: typeof Title;
   Content: typeof Content;
 }

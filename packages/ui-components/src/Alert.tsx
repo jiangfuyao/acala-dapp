@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, ReactElement } from 'react';
+import React, { FC, ReactNode } from 'react';
 import clsx from 'clsx';
 
 import { MessageType, BareProps } from './types';
@@ -14,7 +14,7 @@ interface AlertProps extends BareProps {
 export const Alert: FC<AlertProps> = ({ className, icon, message, type }) => {
   return (
     <div className={clsx('aca-alert', type, className)}>
-      { icon ? icon : <AlertIcon className='aca-alert__icon' /> }
+      { icon || <AlertIcon className='aca-alert__icon' /> }
       <span className='aca-alert__message'>{message}</span>
     </div>
   );

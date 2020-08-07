@@ -6,9 +6,9 @@ import { SwapPoolDetail } from './components/SwapPoolDetail';
 
 const PageWallet: FC = () => {
   return (
-    <Page>
+    <Page fullscreen>
       <Page.Title title='Swap Analysis' />
-      <Page.Content fullscreen>
+      <Page.Content>
         <Grid container>
           <Grid
             item

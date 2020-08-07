@@ -1,10 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
+import { debounce } from 'lodash';
 
 import 'antd/dist/antd.css';
 import './styles/index.scss';
 import './styles/global.css';
 import { BareProps } from './types';
-import { debounce } from 'lodash';
 
 export type BreakPoint = 'sm' | 'md' | 'lg'
 
