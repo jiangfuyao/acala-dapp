@@ -18,7 +18,7 @@ interface TreasuryOverview {
 
 export const useTreasuryOverview = (): WithNull<TreasuryOverview> => {
   const _debitPool = useCall<Balance>('query.cdpTreasury.debitPool');
-  const _surplusPool = useCall<Balance>('query.cdpTreasury.surlpusPool');
+  const _surplusPool = useCall<Balance>('query.cdpTreasury.surplusPool');
   const _totalCollaterals = useCall<[StorageKey, Balance][]>('query.cdpTreasury.totalCollaterals.entries');
   const [result, setResult] = useState<WithNull<TreasuryOverview>>(null);
 

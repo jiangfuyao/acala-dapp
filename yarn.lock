@@ -24,7 +24,7 @@
     memoizee "^0.4.14"
     rxjs "^6.5.5"
 
-"@acala-network/api@^0.4.0", "@acala-network/api@beta":
+"@acala-network/api@0.4.0-beta.0", "@acala-network/api@beta":
   version "0.4.0-beta.0"
   resolved "https://registry.yarnpkg.com/@acala-network/api/-/api-0.4.0-beta.0.tgz#f891eeb0a9b390fa2786129f942b17189daf93e2"
   integrity sha512-sNNY4W6Xvdt4XBJQLQJGdvr1JAAYmIwfnq/vG4tig7JCkCPPRRH0bBpE2ATN76c0uNG3P6gFNzgWxoPgh2j8gA==
@@ -36,7 +36,7 @@
     "@polkadot/api" "^1.18.1"
     "@polkadot/rpc-core" "^1.18.1"
 
-"@acala-network/app-util@^0.4.0", "@acala-network/app-util@beta":
+"@acala-network/app-util@0.4.0-beta.0", "@acala-network/app-util@beta":
   version "0.4.0-beta.0"
   resolved "https://registry.yarnpkg.com/@acala-network/app-util/-/app-util-0.4.0-beta.0.tgz#ee755391acdfb83b459dcb025fa695585007a885"
   integrity sha512-y7Kl/gIoPm9PcQRwnwqIwDtPLdKEDhdoHcmVrGejhiDSiUIgPmGFc1hcpO4BuKJxwiYI7cbOrw4fL3N5OVDs3Q==
@@ -51,7 +51,7 @@
   dependencies:
     "@open-web3/orml-type-definitions" "^0.5.1"
 
-"@acala-network/types@^0.2.0-beta.63", "@acala-network/types@^0.4.0", "@acala-network/types@^0.4.0-beta.0", "@acala-network/types@beta":
+"@acala-network/types@0.4.0-beta.0", "@acala-network/types@^0.2.0-beta.63", "@acala-network/types@^0.4.0-beta.0", "@acala-network/types@beta":
   version "0.4.0-beta.0"
   resolved "https://registry.yarnpkg.com/@acala-network/types/-/types-0.4.0-beta.0.tgz#0ec593165f88821a9a86eccb71a1c92814c03e8b"
   integrity sha512-x2GP0/Z3CmeRA1pA8bQyoFuQ6Q/Yaiz8wjlkVDS8vdbyXeLbL0ak2EtUd1SIndFF+g9C0VKecHKu/7WaaVCiOA==
