@@ -42,7 +42,7 @@ export * from './useCouncilMembers';
 
 // emergency shoutdown
 export * from './useEmergencyShoutdown';
-export * from './useRefundCollateral';
+export * from './useReclaimCollateral';
 
 // treasury & auction
 export * from './treasuryHooks';

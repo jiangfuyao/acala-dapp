@@ -1,0 +1,134 @@
+import React, { FC, useState, ReactNode, useCallback, useMemo, useEffect, useContext } from 'react';
+import clsx from 'clsx';
+
+import { CurrencyId } from '@acala-network/types/interfaces';
+import { Fixed18 } from '@acala-network/app-util';
+import { CurrencyLike } from '@acala-dapp/react-hooks/types';
+import { Dialog, ArrowDownIcon, CheckedCircleIcon, FormItem, Button } from '@acala-dapp/ui-components';
+import { useModal, useConstants, useAccounts, useBalance, useAllPrices } from '@acala-dapp/react-hooks';
+
+import { TxButton, FormatFixed18, tokenEq, FormatValue, TokenName, FormatAddress, Token, FormatBalance } from '@acala-dapp/react-components';
+import { EmergencyShutdownContext } from './EmergencyShutdownProvider';
+import classes from './ReclaimModal.module.scss';
+
+const AssetBoard: FC = () => {
+  const { stableCurrency } = useConstants();
+  const prices = useAllPrices();
+  const { collaterals } = useContext(EmergencyShutdownContext);
+  const totalValue = useMemo(() => {
+    if (!prices || !collaterals) return Fixed18.ZERO;
+
+    return Object.keys(collaterals).reduce((acc, currency) => {
+      const price = prices.find((i) => tokenEq(currency, i.currency));
+
+      return acc.add(price ? price.price.mul(collaterals[currency]) : Fixed18.ZERO);
+    }, Fixed18.ZERO);
+  }, [prices, collaterals]);
+
+  return (
+    <div className={classes.assetBoard}>
+      <p className={classes.title}>My Loans</p>
+      <FormatValue
+        className={classes.value}
+        data={totalValue}
+      />
+      <TokenName
+        className={classes.unit}
+        currency={stableCurrency}
+      />
+    </div>
+  );
+};
+
+interface ReclaimModalProps {
+  visiable: boolean;
+  onClose: () => void;
+}
+
+/**
+ * @name TransferModal
+ * @description a modal for transfer asset
+ */
+export const ReclaimModal: FC<ReclaimModalProps> = ({
+  onClose,
+  visiable
+}) => {
+  const { stableCurrency } = useConstants();
+  const stableBalance = useBalance(stableCurrency);
+  const params = useMemo(() => {
+    return [stableBalance.innerToString()];
+  }, [stableBalance]);
+  const { active } = useAccounts();
+  const { collaterals, setStep } = useContext(EmergencyShutdownContext);
+  const reclaimSsuccess = useCallback(() => {
+    onClose();
+    setStep('success');
+  }, [setStep, onClose]);
+
+
+  if (!active) return null;
+
+  return (
+    <Dialog
+      action={
+        <>
+          <Button
+            onClick={onClose}
+            size='small'
+          >
+              Close
+          </Button>
+          <TxButton
+            method='refundCollaterals'
+            onSuccess={reclaimSsuccess}
+            params={params}
+            section='emergencyShutdown'
+            size='small'
+          >
+              Confirm
+          </TxButton>
+        </>
+      }
+      className={classes.root}
+      onCancel={onClose}
+      title='Reclaim'
+      visiable={visiable}
+      withClose
+    >
+      <AssetBoard />
+      <div className={classes.item}>
+        <p className={classes.label}>Account</p>
+        <div
+          className={classes.address}
+        >
+          <FormatAddress
+            address={active.address}
+            withIcon
+          />
+        </div>
+      </div>
+      <div className={classes.item}>
+        <p className={classes.label}>You will get</p>
+        <ul className={classes.assetList}>
+          {
+            Object.keys(collaterals).map((currency) => {
+              return (
+                <li
+                  className={classes.assetItem}
+                  key={`reclaim-collaterall-${currency}`}
+                >
+                  <Token
+                    currency={currency}
+                    icon
+                    imageClassName={classes.tokenImage}
+                  />
+                  <FormatBalance balance={collaterals[currency]} />
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+    </Dialog>
+  );
+};

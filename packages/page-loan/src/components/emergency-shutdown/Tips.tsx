@@ -14,6 +14,9 @@ const TIPS_AT_STEP: Record<EmergencyShutdownStep, string> = {
 export const Tips: FC = () => {
   const { step } = useContext(EmergencyShutdownContext);
 
+  // don't display tips component if step is at success
+  if (step === 'success') return null;
+
   return (
     <Alert
       className={classes.root}

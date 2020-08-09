@@ -1,15 +1,21 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import { Progress } from 'antd';
-import { useAuctionOverview } from '@acala-dapp/react-hooks';
+import { useAuctionOverview, useEmergencyShutdown } from '@acala-dapp/react-hooks';
 import classes from './Process.module.scss';
+import { EmergencyShutdownContext } from './EmergencyShutdownProvider';
+
+const CAN_REFUND_COUNT = 5;
 
 export const Process: FC = () => {
+  const { setCanReclaim } = useContext(EmergencyShutdownContext);
+  const { canRefund } = useEmergencyShutdown();
   const auction = useAuctionOverview();
+  const [count, setCount] = useState<number>(0);
 
-  const count = useMemo(() => {
+  useEffect(() => {
     let _count = 0;
 
-    if (!auction) return _count;
+    if (!auction) return;
 
     if (auction.totalCollateral) _count += 1;
 
@@ -19,8 +25,14 @@ export const Process: FC = () => {
 
     if (auction.totalTarget) _count += 1;
 
-    return _count;
-  }, [auction]);
+    if (canRefund) _count += 1;
+
+    setCount(_count);
+
+    if (_count === CAN_REFUND_COUNT) {
+      setCanReclaim(true);
+    }
+  }, [auction, setCanReclaim, canRefund]);
 
   return (
     <div className={classes.root}>

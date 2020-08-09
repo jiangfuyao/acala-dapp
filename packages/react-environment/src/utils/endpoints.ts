@@ -10,6 +10,10 @@ export interface EndpointConfig {
 export const DEFAULT_ENDPOINTS: EndpointConfig[] = [
   {
     name: 'Mandala TC4 Node 1 (Hosted by OnFinality)',
+    url: 'ws://127.0.0.1:9944'
+  },
+  {
+    name: 'Mandala TC4 Node 1 (Hosted by OnFinality)',
     url: 'wss://node-6684611762228215808.jm.onfinality.io/ws'
   },
   {
