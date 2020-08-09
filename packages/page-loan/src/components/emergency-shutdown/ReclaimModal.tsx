@@ -1,13 +1,10 @@
-import React, { FC, useState, ReactNode, useCallback, useMemo, useEffect, useContext } from 'react';
-import clsx from 'clsx';
+import React, { FC, useCallback, useMemo, useContext } from 'react';
 
-import { CurrencyId } from '@acala-network/types/interfaces';
 import { Fixed18 } from '@acala-network/app-util';
-import { CurrencyLike } from '@acala-dapp/react-hooks/types';
-import { Dialog, ArrowDownIcon, CheckedCircleIcon, FormItem, Button } from '@acala-dapp/ui-components';
-import { useModal, useConstants, useAccounts, useBalance, useAllPrices } from '@acala-dapp/react-hooks';
+import { Dialog, Button } from '@acala-dapp/ui-components';
+import { useConstants, useAccounts, useBalance, useAllPrices } from '@acala-dapp/react-hooks';
 
-import { TxButton, FormatFixed18, tokenEq, FormatValue, TokenName, FormatAddress, Token, FormatBalance } from '@acala-dapp/react-components';
+import { TxButton, tokenEq, FormatValue, TokenName, FormatAddress, Token, FormatBalance } from '@acala-dapp/react-components';
 import { EmergencyShutdownContext } from './EmergencyShutdownProvider';
 import classes from './ReclaimModal.module.scss';
 
@@ -64,7 +61,6 @@ export const ReclaimModal: FC<ReclaimModalProps> = ({
     onClose();
     setStep('success');
   }, [setStep, onClose]);
-
 
   if (!active) return null;
 

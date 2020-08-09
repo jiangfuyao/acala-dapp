@@ -1,9 +1,10 @@
-import React, { ReactNode, FC, useState, useEffect } from 'react';
+import React, { ReactNode, FC, useState, useEffect, useContext } from 'react';
 import { ApiRx } from '@polkadot/api'; import { timeout, switchMap } from 'rxjs/operators';
 
 import { options } from '@acala-network/api';
 
-import { selectFastestEndpoints, DEFAULT_ENDPOINTS } from './utils/endpoints';
+import { selectFastestEndpoints } from './utils/endpoints';
+import { SettingContext } from './SettingProvider';
 
 const MAX_CONNECT_TIME = 1000 * 60; // one minute
 
@@ -25,7 +26,6 @@ export interface ApiContextData {
 export const ApiContext = React.createContext<ApiContextData>({} as ApiContextData);
 
 interface Props {
-  endpoint?: string;
   children: ReactNode;
   Loading?: ReactNode;
 }
@@ -36,14 +36,14 @@ interface Props {
  */
 export const ApiProvider: FC<Props> = ({
   Loading,
-  children,
-  endpoint
+  children
 }) => {
   const [connectStatus, setConnectStatus] = useState<ConnectStatus>(
     {} as ConnectStatus
   );
   const [api, setApi] = useState<ApiRx>({} as ApiRx);
   const [chain, setChain] = useState<string>('');
+  const { endpoint } = useContext(SettingContext);
 
   const renderContent = (): ReactNode => {
     if (connectStatus.loading) {
@@ -56,21 +56,12 @@ export const ApiProvider: FC<Props> = ({
   };
 
   useEffect(() => {
-    if (api.isConnected) return;
-
-    let _endpoints = DEFAULT_ENDPOINTS;
-
-    if (endpoint) {
-      _endpoints = [{
-        name: '',
-        url: endpoint
-      }];
-    }
+    if (api.isConnected || !endpoint) return;
 
     // reset connect status
     setConnectStatus({ connected: false, error: false, loading: true });
 
-    selectFastestEndpoints(_endpoints).pipe(
+    const subscriber = selectFastestEndpoints(endpoint).pipe(
       switchMap((provider) => {
         return ApiRx.create(options({ provider }));
       }),
@@ -85,7 +76,13 @@ export const ApiProvider: FC<Props> = ({
       }
     });
 
-    return (): void => Reflect.has(api, 'disconnect') ? api.disconnect() : undefined;
+    return (): void => {
+      subscriber.unsubscribe();
+
+      if (api.disconnect) {
+        api.disconnect();
+      }
+    };
   }, [api, endpoint]);
 
   useEffect(() => {

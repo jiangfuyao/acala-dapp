@@ -3,7 +3,7 @@ import React, { createContext, FC, PropsWithChildren, useState, useMemo } from '
 import { Fixed18 } from '@acala-network/app-util';
 
 import { useLockPrices, LockedPricesResult } from '@acala-dapp/react-hooks/useLockPrices';
-import { useConstants, useReclaimCollateral, useBalance, useModal } from '@acala-dapp/react-hooks';
+import { useConstants, useReclaimCollateral, useBalance } from '@acala-dapp/react-hooks';
 
 export type EmergencyShutdownStep = 'trigger' | 'process' | 'reclaim' | 'success';
 
