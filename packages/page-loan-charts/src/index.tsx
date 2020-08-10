@@ -9,23 +9,23 @@ import { LoansOverview } from './components/LoansOverview';
 const PageWallet: FC = () => {
   return (
     <Page fullscreen>
-      <Page.Title title='Loan Analysis' />
+      <Page.Title breadcrumb='Loans'
+        title='Stablecoin' />
       <Page.Content>
         <Grid container>
           <Grid item>
             <TotalDebitAndCollateral />
           </Grid>
-          <Grid
-            item
-            span={12}
-          >
-            <LoansOverview />
-          </Grid>
-          <Grid
-            item
-            span={12}
-          >
+          <Grid item
+            span={12}>
             <LoanCollateralRatio />
+          </Grid>
+          <Grid item
+            span={12}>
+            <LoanCollateralRatio />
+          </Grid>
+          <Grid item>
+            <LoansOverview />
           </Grid>
         </Grid>
       </Page.Content>

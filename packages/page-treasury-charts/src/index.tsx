@@ -11,31 +11,17 @@ const PageWallet: FC = () => {
     <Page fullscreen>
       <Page.Title title='Treasury' />
       <Page.Content>
-        <Grid container>
-          <Grid
-            item
-          >
-            <TreasuryOverview />
-          </Grid>
-          <Grid
-            item
-            span={12}
-          >
-          </Grid>
-        </Grid>
+        <TreasuryOverview />
       </Page.Content>
       <Page.Title title='Auction' />
       <Page.Content fullscreen>
         <Grid container>
-          <Grid
-            item
-          >
+          <Grid item>
             <AuctionOverview />
           </Grid>
           <Grid
             item
-            span={24}
-          >
+            span={24}>
             <AuctionList />
           </Grid>
         </Grid>

@@ -12,6 +12,7 @@ export interface RouterConfigData {
   redirectTo?: string;
 }
 
+const PageDashboardHome = lazy(() => import('@acala-dapp/page-dashboard-home'));
 const PageLoanCharts = lazy(() => import('@acala-dapp/page-loan-charts'));
 const PageSwapCharts = lazy(() => import('@acala-dapp/page-swap-charts'));
 const PageTreasuryCharts = lazy(() => import('@acala-dapp/page-treasury-charts'));
@@ -19,6 +20,10 @@ const PageTreasuryCharts = lazy(() => import('@acala-dapp/page-treasury-charts')
 export const config: RouterConfigData[] = [
   {
     children: [
+      {
+        element: <Suspense fallback={<PageLoading />}><PageDashboardHome/></Suspense>,
+        path: 'home'
+      },
       {
         element: <Suspense fallback={<PageLoading />}><PageLoanCharts/></Suspense>,
         path: 'loan'

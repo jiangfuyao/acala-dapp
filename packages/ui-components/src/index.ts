@@ -32,3 +32,4 @@ export * from './notification';
 export * from './Select';
 export * from './ScrollCard';
 export * from './NumberInput';
+export * from './Statistic';

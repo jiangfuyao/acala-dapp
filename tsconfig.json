@@ -30,6 +30,7 @@
       "@acala-dapp/page-deposit/*": ["page-deposit/src/*"],
       "@acala-dapp/page-governance": ["page-governance/src"],
       "@acala-dapp/page-governance/*": ["page-governance/src/*"],
+      "@acala-dapp/page-dashboard-home": ["page-dashboard-home/src"],
       "@acala-dapp/page-loan-charts": ["page-loan-charts/src"],
       "@acala-dapp/page-loan-charts/*": ["page-loan-charts/src/*"],
       "@acala-dapp/page-swap-charts": ["page-swap-charts/src"],

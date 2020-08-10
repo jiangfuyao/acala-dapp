@@ -1,5 +1,4 @@
 import React, { FC, useMemo } from 'react';
-
 import { Table } from 'antd';
 import { Card } from '@acala-dapp/ui-components';
 import { useConstants } from '@acala-dapp/react-hooks';
@@ -13,7 +12,9 @@ export const LoansOverview: FC = () => {
       {
         key: 'currency',
         /* eslint-disable-next-line react/display-name */
-        render: (item: any): JSX.Element => <Token currency={item.currency} />,
+        render: (item: any): JSX.Element => <Token currency={item.currency}
+          fullname={true}
+          icon={true} />,
         title: 'Currency'
       },
       {
@@ -43,20 +44,20 @@ export const LoansOverview: FC = () => {
     ];
   }, []);
 
-  const data = useMemo(() => loanCurrencies.map((item) => ({
-    currency: item
-  })), [loanCurrencies]);
+  const data = useMemo(
+    () =>
+      loanCurrencies.map((item) => ({
+        currency: item
+      })),
+    [loanCurrencies]
+  );
 
   return (
-    <Card
-      header='Loans Overview'
-      padding={false}
-    >
-      <Table
-        columns={columns}
+    <Card header='Loans Overview'
+      padding={false}>
+      <Table columns={columns}
         dataSource={data}
-        pagination={false}
-      />
+        pagination={false} />
     </Card>
   );
 };

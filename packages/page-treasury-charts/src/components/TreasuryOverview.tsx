@@ -1,9 +1,9 @@
+import { getTokenName } from '@acala-dapp/react-components';
+import { useTreasuryOverview } from '@acala-dapp/react-hooks';
+import { Statistic } from '@acala-dapp/ui-components';
 import React, { FC } from 'react';
 
-import { Card, Grid } from '@acala-dapp/ui-components';
-import { Statistic } from 'antd';
-import { useTreasuryOverview } from '@acala-dapp/react-hooks';
-import { getTokenName } from '@acala-dapp/react-components';
+import classes from './TreasuryOverview.module.scss';
 
 export const TreasuryOverview: FC = () => {
   const overview = useTreasuryOverview();
@@ -11,47 +11,26 @@ export const TreasuryOverview: FC = () => {
   if (!overview) return null;
 
   return (
-    <Grid container>
-      <Grid
-        item
-        span={6}
-      >
-        <Card>
-          <Statistic
-            title='Surplus Pool'
-            value={overview.surplusPool.toNumber(2, 2)}
-          />
-        </Card>
-      </Grid>
-      <Grid
-        item
-        span={6}
-      >
-        <Card>
-          <Statistic
-            title='Debit Pool'
-            value={overview.debitPool.toNumber(2, 2)}
-          />
-        </Card>
-      </Grid>
-      {
-        overview.totalCollaterals.map((item) => {
-          return (
-            <Grid
-              item
-              key={`collateral-${item.currency}`}
-              span={6}
-            >
-              <Card>
-                <Statistic
-                  title={`Current Collateral(${getTokenName(item.currency)})`}
-                  value={item.balance.toNumber(2, 2)}
-                />
-              </Card>
-            </Grid>
-          );
-        })
-      }
-    </Grid>
+    <div className={classes.root}>
+      <div className={classes.item}>
+        <Statistic title='Surplus Pool'
+          value={overview.surplusPool.toNumber(2, 2)} />
+      </div>
+      <div className={classes.item}>
+        <Statistic title='Debit Pool'
+          value={overview.debitPool.toNumber(2, 2)} />
+      </div>
+      {overview.totalCollaterals.map((item) => {
+        return (
+          <div className={classes.item}
+            key={`collateral-${item.currency}`}>
+            <Statistic
+              title={`Current Collateral(${getTokenName(item.currency)})`}
+              value={item.balance.toNumber(2, 2)}
+            />
+          </div>
+        );
+      })}
+    </div>
   );
 };

@@ -34,7 +34,7 @@
     margin-right: 13px;
   }
 
-  &:hover {
+  &:hover:not(.collapse) {
     transform: translate3d(2px, 0, 0);
   }
 
@@ -42,7 +42,7 @@
     transform: translate3d(0, 0, 0);
   }
 
-  &:hover, &:global(.active) {
+  &:hover:not(.collapse), &:global(.active) {
     background-image: linear-gradient(90deg, #E5EAFF 0%, #F5F6FA 100%);
   }
 
@@ -57,6 +57,33 @@
   }
 
   @include link(var(--color-primary), var(--color-primary), var(--color-primary), var(--color-primary));
+}
+
+.collapse {
+  cursor: pointer;
+  user-select: none;
+}
+
+.collapseArrow {
+  margin-left: 8px;
+  margin-bottom: 3px;
+  color: var(--color-primary);
+
+  &.open {
+    svg {
+      transform: rotate(-180deg);
+    }
+  }
+
+  svg {
+    transition: transform .2s cubic-bezier(0,0,.2,1) 0ms;
+  }
+}
+
+.collapseList {
+  .item {
+    padding-left: 60px;
+  }
 }
 
 .wallet {
